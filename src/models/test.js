@@ -10,13 +10,16 @@ const testSchema = new mongoose.Schema(
       type: String,
       required: [true, "Slug is required"],
       unique: true,
-      trim: true,
     },
-    readingPara: {
+    readingParaOne: {
       type: String,
-      required: [true, "Reading paragraph is required"],
     },
-
+    readingParaSec: {
+      type: String,
+    },
+    readingParaThird: {
+      type: String,
+    },
     /*mcqs based test question*/
     multipleChoice: [
       {
@@ -37,7 +40,7 @@ const testSchema = new mongoose.Schema(
           max: {
             type: Number,
             validate: [
-              validateChoicesLength,
+              (value) => validateChoicesLength.call(this, value, 'multipleChoice'),
               "Correct choice index out of range",
             ],
           },
@@ -60,7 +63,7 @@ const testSchema = new mongoose.Schema(
               max: {
                 type: Number,
                 validate: [
-                  validateChoicesLength,
+                  (value) => validateChoicesLength.call(this, value, 'matchingHeading'),
                   "Correct choice index out of range",
                 ],
               },
@@ -84,7 +87,7 @@ const testSchema = new mongoose.Schema(
           max: {
             type: Number,
             validate: [
-              validateChoicesLength,
+              (value) => validateChoicesLength.call(this, value, 'trueFalse'),
               "Correct choice index out of range",
             ],
           },
@@ -124,7 +127,7 @@ const testSchema = new mongoose.Schema(
               max: {
                 type: Number,
                 validate: [
-                  validateChoicesLength,
+                  (value) => validateChoicesLength.call(this, value, 'matchingInformation'),
                   "Correct choice index out of range",
                 ],
               },
@@ -140,8 +143,21 @@ const testSchema = new mongoose.Schema(
 );
 
 /*Validator function checking if that index exists in the array of options*/
-function validateChoicesLength(value) {
-  return this.choices && value < this.choices.length;
+// function validateChoicesLength(value) {
+//   return this?.choices && value < this?.choices?.length;
+// }
+
+
+
+
+/* Validator function checking if that index exists in the array of options */
+function validateChoicesLength(value, field) {
+  return this[0][field][0].choices && value < this[0][field][0].choices.length;
 }
+
+
+
+
+
 
 export default mongoose?.models?.tests || mongoose?.model("tests", testSchema);
