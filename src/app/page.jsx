@@ -17,35 +17,17 @@ const page = () => {
     ],
   });
 
-
-
-  console.log(testQuestions)
-
-
-  // const handleChange = (e) => {
-  //   setTestQuestions({ ...testQuestions, [e.target.value]: e.target.name });
-  // };
+  console.log(testQuestions);
 
   const handleChange = (e) => {
-    const name = e.target.name;
-    const newTestQuestions = { ...testQuestions };
-  
-    if (name.includes('.')) { // Nested property update
-      const [parent, child] = name.split('.');
-      newTestQuestions[parent][child] = e.target.value;
-    } else {
-      newTestQuestions[name] = e.target.value;
-    }
-  
-    setTestQuestions(newTestQuestions);
+    const { name, value } = e.target;
+
+    setTestQuestions({ ...testQuestions, [name]: value });
   };
-  
 
   return (
     <div className="border border-red-300 p-6">
-      <form
-        className=" max-w-[700px] border border-green-400 p-4 m-auto"
-      >
+      <form className=" max-w-[700px] border border-green-400 p-4 m-auto">
         <div className="border-3 border-black mb-2 flex flex-col gap-2">
           <label htmlFor="title">Title</label>
           <input
@@ -54,11 +36,9 @@ const page = () => {
             type="text"
             // value={testQuestions.title}
             name="title"
-
             onChange={handleChange}
           />
         </div>
-
         <div className="border-3 border-black mb-2 flex flex-col gap-2">
           <label htmlFor="readingParaOne">para 1</label>
           <input
@@ -70,7 +50,6 @@ const page = () => {
             id="readingParaOne"
           />
         </div>
-
         <div className="border-3 border-black mb-2 flex flex-col gap-2">
           <label htmlFor="readingParaSec">para 2</label>
           <input
@@ -82,7 +61,6 @@ const page = () => {
             id="readingParaSec"
           />
         </div>
-
         <div className="border-3 border-black mb-2 flex flex-col gap-2">
           <label htmlFor="readingParaThird">para 3</label>
           <input
@@ -101,6 +79,20 @@ const page = () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {/* mcqs */}
         <div className=" border-2 border-yellow-600 my-7">
           {testQuestions?.multipleChoice?.map((v, i) => (
@@ -110,10 +102,10 @@ const page = () => {
                 <input
                   className=" border border-gray-500"
                   onChange={handleChange}
-                  value={testQuestions?.multipleChoice[i].questionText}
+                  value={v[i]?.questionText}
                   type="text"
-                  name={`multipleChoice.${i}.questionText`}
-                  id={`questionText${i}`}
+                  name={`questionText${i}`}
+                  id="questionText"
                 />
               </div>
               <div className="border-3 border-black mb-2 flex flex-col gap-2">
@@ -121,22 +113,24 @@ const page = () => {
                 <input
                   className=" border border-gray-500"
                   onChange={handleChange}
-                  value={v[i]?.correctChoiceIndex}
-                  name={v[i]?.correctChoiceIndex}
+                  value={testQuestions?.multipleChoice[i]?.correctChoiceIndex}
+                  name="correctChoiceIndex"
                   type="number"
                   id="correctChoiceIndex"
                 />
               </div>
 
-              {v?.choices?.map((opt, i) => (
+              {v?.choices?.map((opt, j) => (
                 <>
                   <div className="border-3 border-black mb-2 flex flex-col gap-2">
                     <label htmlFor="readingParaThird">option title</label>
                     <input
                       className=" border border-gray-500"
                       onChange={handleChange}
-                      value={opt[i]?.optionTitle}
-                      name={opt[i]?.optionTitle}
+                      value={
+                        testQuestions.multipleChoice[i]?.choices[j].optionTitle
+                      }
+                      name="optionTitle"
                       type="text"
                       id="correctChoiceIndex"
                     />
@@ -147,32 +141,18 @@ const page = () => {
                     <input
                       className=" border border-gray-500"
                       onChange={handleChange}
-                      value={opt[i]?.optionValue}
-                      name={opt[i]?.optionValue}
+                      value={
+                        testQuestions?.multipleChoice[i]?.choices[j].optionValue
+                      }
+                      name="optionValue"
                       type="text"
-                      id="correctChoiceIndex"
+                      id="optionValue"
                     />
                   </div>
                 </>
               ))}
             </>
           ))}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div>
       </form>
     </div>
