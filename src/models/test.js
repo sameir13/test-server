@@ -20,6 +20,7 @@ const testSchema = new mongoose.Schema(
     readingParaThird: {
       type: String,
     },
+
     /*mcqs based test question*/
     multipleChoice: [
       {
@@ -37,13 +38,6 @@ const testSchema = new mongoose.Schema(
           type: Number,
           required: true,
           min: 0,
-          max: {
-            type: Number,
-            validate: [
-              (value) => validateChoicesLength.call(this, value, 'multipleChoice'),
-              "Correct choice index out of range",
-            ],
-          },
         },
       },
     ],
@@ -60,13 +54,6 @@ const testSchema = new mongoose.Schema(
               type: Number,
               required: true,
               min: 0,
-              max: {
-                type: Number,
-                validate: [
-                  (value) => validateChoicesLength.call(this, value, 'matchingHeading'),
-                  "Correct choice index out of range",
-                ],
-              },
             },
           },
         ],
@@ -80,20 +67,6 @@ const testSchema = new mongoose.Schema(
           type: String,
         },
 
-        correctChoiceIndex: {
-          type: Number,
-          required: true,
-          min: 0,
-          max: {
-            type: Number,
-            validate: [
-              (value) => validateChoicesLength.call(this, value, 'trueFalse'),
-              "Correct choice index out of range",
-            ],
-          },
-          enum:[0,1,2]
-        },
-
         choices: [
           {
             optionValue: { type: String },
@@ -105,6 +78,15 @@ const testSchema = new mongoose.Schema(
             optionValue: { type: String },
           },
         ],
+
+        correctChoiceIndex: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+
+        
+
       },
     ],
 
@@ -119,21 +101,12 @@ const testSchema = new mongoose.Schema(
         questionOptions: [
           {
             optionTitle: { type: String },
-
+            choices: [{ type: String }],
             correctChoiceIndex: {
               type: Number,
               required: true,
               min: 0,
-              max: {
-                type: Number,
-                validate: [
-                  (value) => validateChoicesLength.call(this, value, 'matchingInformation'),
-                  "Correct choice index out of range",
-                ],
-              },
             },
-
-            choices: [{ type: String }],
           },
         ],
       },
@@ -141,23 +114,5 @@ const testSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-/*Validator function checking if that index exists in the array of options*/
-// function validateChoicesLength(value) {
-//   return this?.choices && value < this?.choices?.length;
-// }
-
-
-
-
-/* Validator function checking if that index exists in the array of options */
-function validateChoicesLength(value, field) {
-  return this[0][field][0].choices && value < this[0][field][0].choices.length;
-}
-
-
-
-
-
 
 export default mongoose?.models?.tests || mongoose?.model("tests", testSchema);
