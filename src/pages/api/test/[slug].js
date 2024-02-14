@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   dbConnect();
 
   try {
-    const findTest = await test.findOne({slug:req.query.slug});
+    const findTest = await test.findOne({ slug: req.query.slug });
     if (!findTest) {
       res.status(404).json({
         success: false,
@@ -16,8 +16,7 @@ export default async function handler(req, res) {
     }
 
     switch (req.method) {
-
-/*finding single test-------------------------------*/
+      /*finding single test-------------------------------*/
       case "GET":
         const findOneTest = await test.findOne({ slug: req.query.slug });
         res.status(200).json({
@@ -26,7 +25,7 @@ export default async function handler(req, res) {
         });
 
         break;
-/*deleting a test----------------------------*/
+      /*deleting a test----------------------------*/
       case "DELETE":
         const removeOneTest = await test.findByIdAndDelete(findTest?._id);
         res.status(200).json({
@@ -35,7 +34,7 @@ export default async function handler(req, res) {
         });
 
         break;
-/*updating a test-----------------------------*/
+      /*updating a test-----------------------------*/
       case "PUT":
         const updateOneTest = await test.findByIdAndUpdate(
           findTest?._id,
@@ -53,11 +52,10 @@ export default async function handler(req, res) {
         break;
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-        success:false,
-        message:"Internal Server Error"
-    })
-
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 }
