@@ -19,9 +19,9 @@ const Page = () => {
 
   console.log(testQuestions);
 
+  // new change handler for the array forms
   const handleChange = (e, index, choiceIndex) => {
     const { name, value } = e.target;
-
     if (name.startsWith("multipleChoice.questionText")) {
       const updatedQuestions = [...testQuestions.multipleChoice];
       updatedQuestions[index].questionText = value;
@@ -165,13 +165,12 @@ const Page = () => {
                 <div key={j}>
                   <div className="border-3 border-black mb-2 flex flex-col gap-2">
                     <label htmlFor="readingParaThird">option title</label>
+
                     <input
                       className=" border border-gray-500"
-                      onChange={handleChange}
-                      value={
-                        testQuestions.multipleChoice[i]?.choices[j].optionTitle
-                      }
-                      name="optionTitle"
+                      onChange={(e) => handleChange(e, i, j)}
+                      value={opt?.optionTitle}
+                      name={"multipleChoice.choices.optionTitle"}
                       type="text"
                       id="correctChoiceIndex"
                     />
@@ -181,11 +180,9 @@ const Page = () => {
                     <label htmlFor="readingParaThird">option value</label>
                     <input
                       className=" border border-gray-500"
-                      onChange={handleChange}
-                      value={
-                        testQuestions?.multipleChoice[i]?.choices[j].optionValue
-                      }
-                      name="optionValue"
+                      onChange={(e) => handleChange(e, i, j)}
+                      value={opt?.optionValue}
+                      name={"multipleChoice.choices.optionValue"}
                       type="text"
                       id="optionValue"
                     />
