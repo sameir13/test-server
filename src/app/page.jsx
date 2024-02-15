@@ -17,7 +17,6 @@ const Page = () => {
     ],
   });
 
-  console.log(testQuestions);
 
   // new change handler for the array forms
   const handleChange = (e, index, choiceIndex) => {
