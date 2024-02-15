@@ -53,7 +53,121 @@ const Page = () => {
     } else {
       setTestQuestions({ ...testQuestions, [name]: value });
     }
+
+    if(name.startsWith("multipleChoice.questionText") || name.startsWith("multipleChoice.correctChoiceIndex") || name.startsWith("multipleChoice.choices.optionValue") || name.startsWith("multipleChoice.choices.optionTitle")  ){
+      const upadateTest = testQuestions.multipleChoice.map((v,i)=>{
+        if(i === index){
+          return {...v , [name] : value};
+        }
+
+        return v
+      })
+      setTestQuestions({...testQuestions , multipleChoice:upadateTest})
+    }else{
+      setTestQuestions({...testQuestions, [name]:value})
+    }
   };
+
+
+
+
+
+
+
+
+
+
+
+
+  // const handleInput = (e, id) => {
+  //   if (e.target.name === "tabName" || e.target.name === "icon") {
+  //     const UpdatedDestination = BlogData?.buttons?.map((v, i) => {
+  //       if (i === id) {
+  //         return { ...v, [e.target.name]: e.target.value };
+  //       }
+  //       return v;
+  //     });
+  //     setBlogData({ ...BlogData, buttons: UpdatedDestination });
+  //   } else {
+  //     setBlogData({ ...BlogData, [e.target.name]: e.target.value });
+  //   }
+  // };
+
+  // adding more tabs to the destionations-------
+  // const addMorefaq = () => {
+  //   setTestQuestions({
+  //     ...testQuestions,
+  //     multipleChoice: [
+  //       ...testQuestions.multipleChoice,
+  //       {
+  //         questionText: "",
+  //         choices: [{ optionTitle: "", optionValue: "" }],
+  //         correctChoiceIndex: 0,
+  //       },
+  //     ],
+  //     return { ...prev, multipleChoice: updatedMultipleChoice };
+  //   });
+  // };
+
+
+
+  // const addMorefaq = () => {
+  //   setTestQuestions((prev) => {
+  //     const updatedMultipleChoice = [
+  //       ...prev.multipleChoice,
+  //       {
+  //         questionText: "",
+  //         choices: [{ optionTitle: "", optionValue: "" }],
+  //         correctChoiceIndex: 0,
+  //       },
+  //     ];
+  
+  //     return { ...prev, multipleChoice: updatedMultipleChoice };
+  //   });
+  // };
+
+
+
+
+
+
+
+
+
+  const addMorefaq = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+  
+    setTestQuestions((prev) => {
+      const updatedMultipleChoice = [
+        ...prev.multipleChoice,
+        {
+          questionText: "",
+          choices: [{ optionTitle: "", optionValue: "" }],
+          correctChoiceIndex: 0,
+        },
+      ];
+  
+      return { ...prev, multipleChoice: updatedMultipleChoice };
+    });
+  };
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // const handleChange = (e) => {
   //   const { name, value } = e.target;
@@ -145,7 +259,7 @@ const Page = () => {
                   id={`questionText-${i}`}
                   name={`multipleChoice.questionText`}
                   onChange={(e) => handleChange(e, i)}
-                  value={v.questionText}
+                  value={v[i]?.questionText}
                   className="border border-gray-500"
                 />
               </div>
@@ -154,7 +268,7 @@ const Page = () => {
                 <input
                   className=" border border-gray-500"
                   onChange={(e) => handleChange(e, i)}
-                  value={v.correctChoiceIndex}
+                  value={v[i]?.correctChoiceIndex}
                   name={"multipleChoice.correctChoiceIndex"}
                   type="number"
                   id="correctChoiceIndex"
@@ -169,7 +283,7 @@ const Page = () => {
                     <input
                       className=" border border-gray-500"
                       onChange={(e) => handleChange(e, i, j)}
-                      value={opt?.optionTitle}
+                      value={opt[j]?.optionTitle}
                       name={"multipleChoice.choices.optionTitle"}
                       type="text"
                       id="correctChoiceIndex"
@@ -181,7 +295,7 @@ const Page = () => {
                     <input
                       className=" border border-gray-500"
                       onChange={(e) => handleChange(e, i, j)}
-                      value={opt?.optionValue}
+                      value={opt[j]?.optionValue}
                       name={"multipleChoice.choices.optionValue"}
                       type="text"
                       id="optionValue"
@@ -192,6 +306,12 @@ const Page = () => {
             </div>
           ))}
         </div>
+
+
+
+                <button onClick={addMorefaq}>Add more</button>
+
+
       </form>
     </div>
   );
