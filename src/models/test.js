@@ -43,24 +43,22 @@ const testSchema = new mongoose.Schema(
     ],
 
 
-
+    
     /*Match The information questions*/
+    headingAnswer: [{ type: String }],
     matchingHeading: [
       {
-        answerInfo: [{ answerOption: String }],
-        questionOptions: [
-          {
-            optionTitle: { type: String },
-            choices: [{ type: String }],
-            correctChoiceIndex: {
-              type: Number,
-              required: true,
-              min: 0,
-            },
-          },
-        ],
+        matchingHeadingQuesTitle: { type: String },
+        matchHeadingsChoices: [{ type: String }],
+        matchingHeadingAnswerIndex: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
       },
     ],
+
+
 
     /*yes no and not given questions*/
     trueFalse: [
@@ -86,9 +84,6 @@ const testSchema = new mongoose.Schema(
           required: true,
           min: 0,
         },
-
-        
-
       },
     ],
 

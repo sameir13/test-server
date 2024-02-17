@@ -26,6 +26,14 @@ const Page = () => {
         trueFalseCorrectIndex: 0,
       },
     ],
+    headingAnswer: [""],
+    matchingHeading: [
+      {
+        matchingHeadingQuesTitle: "",
+        matchingHeadingAnswerIndex: 0,
+        matchHeadingsChoices: [""],
+      },
+    ],
   });
 
   console.log(testQuestions);
@@ -82,9 +90,23 @@ const Page = () => {
       return;
     }
 
+    if (
+      name === "matchingHeadingQuesTitle" ||
+      name === "matchingHeadingAnswerIndex"
+    ) {
+      const updatedTrueFalse = testQuestions?.matchingHeading?.map((v, i) => {
+        if (i === id) {
+          return { ...v, [name]: value };
+        }
+        return v;
+      });
+
+      setTestQuestions({ ...testQuestions, matchingHeading: updatedTrueFalse });
+      return;
+    }
+
     setTestQuestions({ ...testQuestions, [name]: value });
   };
-
 
   // FUNCTIONS FOR ADDING GENERATING MORE TABS IN THE ARRAY------------------------------
   const addMorefaq = (e) => {
@@ -173,6 +195,32 @@ const Page = () => {
       );
       return { ...prev, trueFalse: afterRemovingTrueFalse };
     });
+  };
+
+  // Matching heading answer options adding----------------------------
+  const [data, setdata] = useState();
+  const [tags, setTags] = useState([]);
+  // Convert to Tags Funcitonlity -------/
+  const addTag = (e) => {
+    e.preventDefault();
+    var copy = tags;
+    copy.push(data);
+    setTags(copy);
+    setdata("");
+  };
+
+  // Handle KeyDown Funcitons ------------/
+  const handlekeydown = (e) => {
+    if (e.key === "Enter") {
+      addTag(e);
+    }
+  };
+
+  // Handle Answer Delete -----------------/
+  const handleDel = (i) => {
+    const updatetags = [...tags];
+    updatetags.splice(i, 1);
+    setTags(updatetags);
   };
 
   return (
@@ -365,7 +413,7 @@ const Page = () => {
                   />
                 </div>
 
-                <div className=" border border-black p-1 my-4 flex justify-between">
+                <div className=" border p-1 my-4 flex justify-between">
                   <span className=" text-sm text-gray-400">YES: 1</span>
                   <span className=" text-sm text-gray-400">NO: 0</span>
                   <span className=" text-sm text-gray-400">NOT GIVEN: 2</span>
@@ -373,14 +421,19 @@ const Page = () => {
 
                 <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
                   <label htmlFor="readingParaThird">Correct Answer Index</label>
-                  <input
+
+                  <select
                     className=" border border-gray-500"
                     onChange={(e) => handleChange(e, i)}
                     value={testQuestions.trueFalse[i].trueFalseCorrectIndex}
                     name={"trueFalseCorrectIndex"}
                     type="number"
                     id="trueFalseCorrectIndex"
-                  />
+                  >
+                    <option value={1}>YES</option>
+                    <option value={0}>NO</option>
+                    <option value={2}>NOT GIVEN</option>
+                  </select>
                 </div>
               </>
             </div>
@@ -392,6 +445,95 @@ const Page = () => {
           >
             Add More True False Questions
           </button>
+        </div>
+
+        {/* matching headings inputs her---------------------------------------e */}
+
+        <div className=" border border-red-400 my-8 p-7">
+          <div className=" border border-yellow-300 mb-3">
+            <label
+              className="text-sm text-gray-500 tracking-wider"
+              htmlFor="tags"
+            >
+              Answer Options
+            </label>
+
+            <div className="input">
+              <div className="inputbox">
+                <input
+                  id="tags"
+                  value={data}
+                  type="text"
+                  placeholder="Add Tags"
+                  onKeyDown={handlekeydown}
+                  onChange={(e) => setdata(e.target.value)}
+                  className=" border p-2 w-full rounded-md mt-1 text-gray-400 focus:text-gray-500 placeholder:text-gray-300 outline-none focus:ring-2"
+                />
+              </div>
+            </div>
+
+            {tags?.length >= 1 && (
+              <div className="border border-gray-400 my-3 p-2">
+                {tags.map((v, i) => (
+                  <div className="flex items-center gap-3" id={i}>
+                    <span>{i}</span> {" - "}
+                    <span>{v}</span>
+                    <span
+                      className=" text-sm text-red-800 cursor-pointer"
+                      onClick={() => handleDel(i)}
+                    >
+                      x
+                    </span>
+                    <i className="fa-solid fa-x"></i>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div>
+            {testQuestions?.matchingHeading?.map((v, i) => (
+              <div key={i}>
+                <div className="  mb-2 flex flex-col gap-2  ">
+                  <label htmlFor="readingParaThird">Question Text</label>
+                  <input
+                    type="text"
+                    name={"matchingHeadingQuesTitle"}
+                    onChange={(e) => handleChange(e, i)}
+                    value={
+                      testQuestions?.matchingHeading[i]
+                        ?.matchingHeadingQuesTitle
+                    }
+                    id={"questionText"}
+                    className="border border-gray-500"
+                  />
+                </div>
+                <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                  <label htmlFor="readingParaThird">Correct Answer Index</label>
+                  <input
+                    className=" border border-gray-500"
+                    onChange={(e) => handleChange(e, i)}
+                    value={
+                      testQuestions.matchingHeading[i]
+                        ?.matchingHeadingAnswerIndex
+                    }
+                    name={"matchingHeadingAnswerIndex"}
+                    type="number"
+                    id="correctChoiceIndex"
+                  />
+                </div>
+              </div>
+            ))} 
+
+
+                      <select name="" id=""></select>
+
+          </div>
+
+
+
+
+
         </div>
       </form>
     </div>
