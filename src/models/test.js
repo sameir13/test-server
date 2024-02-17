@@ -42,6 +42,8 @@ const testSchema = new mongoose.Schema(
       },
     ],
 
+
+
     /*Match The information questions*/
     matchingHeading: [
       {
@@ -63,7 +65,7 @@ const testSchema = new mongoose.Schema(
     /*yes no and not given questions*/
     trueFalse: [
       {
-        questionText: {
+        QuestionText: {
           type: String,
         },
 
