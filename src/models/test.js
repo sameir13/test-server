@@ -65,23 +65,23 @@ const testSchema = new mongoose.Schema(
     /*yes no and not given questions*/
     trueFalse: [
       {
-        QuestionText: {
+        trueFalseQuestion: {
           type: String,
         },
 
-        choices: [
+        trueFalseChoices: [
           {
-            optionValue: { type: String },
+            answerValue: { type: String },
           },
           {
-            optionValue: { type: String },
+            answerValue: { type: String },
           },
           {
-            optionValue: { type: String },
+            answerValue: { type: String },
           },
         ],
 
-        correctChoiceIndex: {
+        trueFalseCorrectIndex: {
           type: Number,
           required: true,
           min: 0,
