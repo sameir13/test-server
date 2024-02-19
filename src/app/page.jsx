@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 
 const Page = () => {
@@ -26,6 +26,9 @@ const Page = () => {
         trueFalseCorrectIndex: 0,
       },
     ],
+
+
+
     headingAnswer: [""],
     matchingHeading: [
       {
@@ -90,10 +93,7 @@ const Page = () => {
       return;
     }
 
-    if (
-      name === "matchingHeadingQuesTitle" ||
-      name === "matchingHeadingAnswerIndex"
-    ) {
+    if (name === "matchingHeadingQuesTitle" ||name === "matchingHeadingAnswerIndex") {
       const updatedTrueFalse = testQuestions?.matchingHeading?.map((v, i) => {
         if (i === id) {
           return { ...v, [name]: value };
@@ -105,8 +105,30 @@ const Page = () => {
       return;
     }
 
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
     setTestQuestions({ ...testQuestions, [name]: value });
   };
+
+
+
+
+
+
+
 
   // FUNCTIONS FOR ADDING GENERATING MORE TABS IN THE ARRAY------------------------------
   const addMorefaq = (e) => {
@@ -222,6 +244,19 @@ const Page = () => {
     updatetags.splice(i, 1);
     setTags(updatetags);
   };
+
+
+
+
+
+  console.log(tags.indexOf)
+
+
+
+  
+  
+
+
 
   return (
     <div className="border border-red-300 p-6">
