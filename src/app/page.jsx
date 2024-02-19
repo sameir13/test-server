@@ -27,12 +27,19 @@ const Page = () => {
       },
     ],
 
-    headingAnswer: [""],
     matchingHeading: [
       {
         matchingHeadingQuesTitle: "",
         matchingHeadingAnswerIndex: 0,
         matchHeadingsChoices: [],
+      },
+    ],
+
+    matchingInformation: [
+      {
+        matchingInfoQuesTitle: "",
+        matchingInfoAnswersIndex: 0,
+        matchingInfoChoices: [],
       },
     ],
   });
@@ -53,7 +60,6 @@ const Page = () => {
       setTestQuestions({ ...testQuestions, multipleChoice: updatedQuestions });
       return;
     }
-
     if (name === "optionTitle" || name === "optionValue") {
       const updatedOptions = testQuestions?.multipleChoice[id]?.choices?.map(
         (v, i) => {
@@ -78,7 +84,6 @@ const Page = () => {
       }));
       return;
     }
-
     if (name === "trueFalseQuestion" || name === "trueFalseCorrectIndex") {
       const updatedTrueFalse = testQuestions?.trueFalse?.map((v, i) => {
         if (i === id) {
@@ -90,7 +95,6 @@ const Page = () => {
       setTestQuestions({ ...testQuestions, trueFalse: updatedTrueFalse });
       return;
     }
-
     if (
       name === "matchingHeadingQuesTitle" ||
       name === "matchingHeadingAnswerIndex"
@@ -103,6 +107,27 @@ const Page = () => {
       });
 
       setTestQuestions({ ...testQuestions, matchingHeading: updatedTrueFalse });
+      return;
+    }
+
+    if (
+      name === "matchingInfoQuesTitle" ||
+      name === "matchingInfoAnswersIndex"
+    ) {
+      const updatedInformationHandler = testQuestions?.matchingInformation?.map(
+        (v, i) => {
+          if (i === id) {
+            return { ...v, [name]: value };
+          }
+          return v;
+        }
+      );
+
+      setTestQuestions({
+        ...testQuestions,
+        matchingInformation: updatedInformationHandler,
+      });
+
       return;
     }
 
@@ -161,6 +186,35 @@ const Page = () => {
       }),
     }));
   };
+  const addMoreMatchHeadings = (e) => {
+    e.preventDefault();
+    setTestQuestions((prev) => {
+      const updatedHeadingQuestion = [
+        ...prev.matchingHeading,
+        {
+          matchingHeadingQuesTitle: "",
+          matchingHeadingAnswerIndex: 0,
+          matchHeadingsChoices: [],
+        },
+      ];
+
+      return { ...prev, matchingHeading: updatedHeadingQuestion };
+    });
+  };
+  const addMoreMatchInfoQuestions = (e) => {
+    e.preventDefault();
+    setTestQuestions((prev) => {
+      const afterAddingMoreInfoQuestions = [
+        ...prev.matchingInformation,
+        {
+          matchingInfoQuesTitle: "",
+          matchingInfoAnswersIndex: 0,
+          matchingInfoChoices: [],
+        },
+      ];
+      return { ...prev, matchingInformation: afterAddingMoreInfoQuestions };
+    });
+  };
 
   // FUNCTIONS FOR REMOVING THE QUESTIONS-------
   const deleteMcqs = (i) => {
@@ -169,6 +223,16 @@ const Page = () => {
         (items, index) => i != index
       );
       return { ...prev, multipleChoice: afterRemovingMcqs };
+    });
+  };
+
+  const deleteMatchHeadingQuestions = (i) => {
+    setTestQuestions((prev) => {
+      const afterRemovingMatchHeadingQuestion = prev.matchingHeading?.filter(
+        (items, index) => i != index
+      );
+
+      return { ...prev, matchingHeading: afterRemovingMatchHeadingQuestion };
     });
   };
 
@@ -198,10 +262,19 @@ const Page = () => {
     });
   };
 
+  const deleteMatchInfoQuestions = (i) => {
+    setTestQuestions((prev) => {
+      const afterRemovingMatchInfoQuestions = prev?.matchingInformation?.filter(
+        (items, index) => i != index
+      );
+
+      return { ...prev, matchingInformation: afterRemovingMatchInfoQuestions };
+    });
+  };
+
   // Matching heading answer options adding----------------------------
   const [data, setdata] = useState();
   const [tags, setTags] = useState([]);
-  // Convert to Tags Funcitonlity -------/
   const addTag = (e) => {
     e.preventDefault();
     var copy = tags;
@@ -236,10 +309,94 @@ const Page = () => {
 
   // Handle Answer Delete -----------------/
   const handleDel = (i) => {
-    const updatetags = [...tags];
-    updatetags.splice(i, 1);
-    setTags(updatetags);
+    const updatedTags = [...tags];
+    updatedTags.splice(i, 1);
+    setTags(updatedTags);
+    setTestQuestions((prev) => {
+      const updatedMatchingHeading = prev.matchingHeading.map((mh) => {
+        const updatedMatchHeadingsChoices = updatedTags.map(
+          (tag, tagsIndex) => {
+            return tagsIndex;
+          }
+        );
+
+        return {
+          ...mh,
+          matchHeadingsChoices: updatedMatchHeadingsChoices,
+        };
+      });
+
+      return {
+        ...prev,
+        matchingHeading: updatedMatchingHeading,
+      };
+    });
   };
+
+  // Matching Information answer options adding---------------------------------------
+  const [infoData, setInfoData] = useState();
+  const [matchingInformationValues, setMatchingInformationValues] = useState([]);
+  const addInfoAnswers = (e) => {
+    e.preventDefault();
+    var copy = matchingInformationValues;
+    copy.push(infoData);
+    setMatchingInformationValues(copy);
+    setInfoData("");
+
+    setTestQuestions((prev) => {
+      const updatedMatchingInfo = prev.matchingInformation.map((mI) => {
+        const updatedMatchingInfoChoices = matchingInformationValues?.map(
+          (ans, ansIndex) => {
+            return ansIndex;
+          }
+        );
+
+        return {
+          ...mI,
+          matchingInfoChoices: updatedMatchingInfoChoices,
+        };
+      });
+
+      return {
+        ...prev,
+        matchingInformation: updatedMatchingInfo,
+      };
+    });
+  };
+  const handleEnterDown = (e) => {
+    if (e.key === "Enter") {
+      addInfoAnswers(e);
+    }
+  };
+  const handleInfoAnsDel = (i) => {
+    setMatchingInformationValues((prevMatchingInfoValues) => {
+      const copyInfoAnswers = [...prevMatchingInfoValues];
+      copyInfoAnswers.splice(i, 1);
+
+      setTestQuestions((prev) => {
+        const updatedMatchingInfo = prev.matchingInformation.map((mI) => {
+          const updatedMatchingInfoChoices = copyInfoAnswers.map(
+            (ans, ansIndex) => {
+              return ansIndex;
+            }
+          );
+
+          return {
+            ...mI,
+            matchingInfoChoices: updatedMatchingInfoChoices,
+          };
+        });
+
+        return {
+          ...prev,
+          matchingInformation: updatedMatchingInfo,
+        };
+      });
+
+      return copyInfoAnswers;
+    });
+  };
+  // ends here------------------------------------------------------------------------
 
   return (
     <div className="border border-red-300 p-6">
@@ -250,7 +407,7 @@ const Page = () => {
             id="title"
             className="border border-gray-500"
             type="text"
-            // value={testQuestions.title}
+            value={testQuestions.title}
             name="title"
             onChange={handleChange}
           />
@@ -289,7 +446,7 @@ const Page = () => {
           />
         </div>
 
-        {/* WORKING -________________ */}
+        {/* FORM HANDLING FOR THE ARRAYS IN THE USESTATES ---------------------------------------------------------------------------------------------------------------------------------- */}
 
         {/* mcqs------------------------------------------------------------------------------------------------- */}
         <div className="my-7 p-7 border border-green-500">
@@ -400,6 +557,122 @@ const Page = () => {
           </button>
         </div>
 
+        {/* matching headings inputs her---------------------------------------e */}
+        <div className=" border border-red-400 my-8 p-7">
+          <h1 className=" mb-5">MATCH THE HEADING QUESTIONS </h1>
+          <div className="  mb-3">
+            <label
+              className="text-sm text-gray-500 tracking-wider"
+              htmlFor="tags"
+            >
+              Answer Options
+            </label>
+
+            <div className="input">
+              <div className="inputbox">
+                <input
+                  id="tags"
+                  value={data}
+                  type="text"
+                  placeholder="Add Tags"
+                  onKeyDown={handlekeydown}
+                  onChange={(e) => setdata(e.target.value)}
+                  className=" border p-2 w-full rounded-md mt-1 text-gray-400 focus:text-gray-500 placeholder:text-gray-300 outline-none focus:ring-2"
+                />
+              </div>
+            </div>
+
+            {tags?.length >= 1 && (
+              <div className="border border-gray-400 my-3 p-2">
+                {tags.map((v, i) => (
+                  <div className="flex items-center gap-3" id={i}>
+                    <span>{i}</span> {" - "}
+                    <span>{v}</span>
+                    <span
+                      className=" text-sm text-red-800 cursor-pointer"
+                      onClick={() => handleDel(i)}
+                    >
+                      x
+                    </span>
+                    <i className="fa-solid fa-x"></i>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div>
+            {testQuestions?.matchingHeading?.map((v, i) => (
+              <>
+                <div
+                  key={i}
+                  className=" border border-blue-400 my-3 p-5 relative"
+                >
+                  <span
+                    onClick={() => deleteMatchHeadingQuestions(i)}
+                    className={
+                      i > 0
+                        ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                        : " hidden"
+                    }
+                  >
+                    remove
+                  </span>
+                  <div className="  mb-2 flex flex-col gap-2  ">
+                    <label htmlFor="readingParaThird">Question Text</label>
+                    <input
+                      type="text"
+                      name={"matchingHeadingQuesTitle"}
+                      onChange={(e) => handleChange(e, i)}
+                      value={
+                        testQuestions?.matchingHeading[i]
+                          ?.matchingHeadingQuesTitle
+                      }
+                      id={"questionText"}
+                      className="border border-gray-500"
+                    />
+                  </div>
+
+                  {tags.length > 0 && (
+                    <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                      <label htmlFor="readingParaThird">
+                        Correct Answer Index
+                      </label>
+                      <select
+                        className=" border w-full border-gray-500"
+                        onChange={(e) => handleChange(e, i)}
+                        value={
+                          testQuestions.matchingHeading[i]
+                            ?.matchingHeadingAnswerIndex
+                        }
+                        name={"matchingHeadingAnswerIndex"}
+                        type="number"
+                        id="correctChoiceIndex"
+                      >
+                        <option value="" selected>
+                          Select the correct index
+                        </option>
+                        {tags?.map((v, i) => (
+                          <>
+                            <option value={i}>{i || 0}</option>
+                          </>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </>
+            ))}
+          </div>
+
+          <button
+            className="border bg-blue-300 p-1 rounded-sm text-white"
+            onClick={(e) => addMoreMatchHeadings(e)}
+          >
+            Add More Questions
+          </button>
+        </div>
+
         {/* true False Form ------------------------------------------------------------------------------------*/}
         <div className=" border border-red-400 my-7 p-4 ">
           <h1>TRUE FALSE</h1>
@@ -465,10 +738,10 @@ const Page = () => {
           </button>
         </div>
 
-        {/* matching headings inputs her---------------------------------------e */}
+        <div className="border border-red-400 my-7 p-4">
+          <h1>MATCH THE INFORMATON QUESTIONS</h1>
 
-        <div className=" border border-red-400 my-8 p-7">
-          <div className="  mb-3">
+          <div className="my-5">
             <label
               className="text-sm text-gray-500 tracking-wider"
               htmlFor="tags"
@@ -480,25 +753,25 @@ const Page = () => {
               <div className="inputbox">
                 <input
                   id="tags"
-                  value={data}
+                  value={infoData}
                   type="text"
                   placeholder="Add Tags"
-                  onKeyDown={handlekeydown}
-                  onChange={(e) => setdata(e.target.value)}
+                  onKeyDown={handleEnterDown}
+                  onChange={(e) => setInfoData(e.target.value)}
                   className=" border p-2 w-full rounded-md mt-1 text-gray-400 focus:text-gray-500 placeholder:text-gray-300 outline-none focus:ring-2"
                 />
               </div>
             </div>
 
-            {tags?.length >= 1 && (
+            {matchingInformationValues?.length >= 1 && (
               <div className="border border-gray-400 my-3 p-2">
-                {tags.map((v, i) => (
+                {matchingInformationValues?.map((v, i) => (
                   <div className="flex items-center gap-3" id={i}>
                     <span>{i}</span> {" - "}
                     <span>{v}</span>
                     <span
                       className=" text-sm text-red-800 cursor-pointer"
-                      onClick={() => handleDel(i)}
+                      onClick={() => handleInfoAnsDel(i)}
                     >
                       x
                     </span>
@@ -510,52 +783,74 @@ const Page = () => {
           </div>
 
           <div>
-            {testQuestions?.matchingHeading?.map((v, i) => (
-              <div key={i}>
-                <div className="  mb-2 flex flex-col gap-2  ">
-                  <label htmlFor="readingParaThird">Question Text</label>
-                  <input
-                    type="text"
-                    name={"matchingHeadingQuesTitle"}
-                    onChange={(e) => handleChange(e, i)}
-                    value={
-                      testQuestions?.matchingHeading[i]
-                        ?.matchingHeadingQuesTitle
+            {testQuestions?.matchingInformation?.map((v, i) => (
+              <>
+                <div
+                  key={i}
+                  className=" border border-blue-400 my-3 p-5 relative"
+                >
+                  <span
+                    onClick={() => deleteMatchInfoQuestions(i)}
+                    className={
+                      i > 0
+                        ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                        : " hidden"
                     }
-                    id={"questionText"}
-                    className="border border-gray-500"
-                  />
-                </div>
-
-                {tags.length > 0 && (
-                  <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                    <label htmlFor="readingParaThird">
-                      Correct Answer Index
-                    </label>
-                    <select
-                      className=" border w-full border-gray-500"
+                  >
+                    remove
+                  </span>
+                  <div className="  mb-2 flex flex-col gap-2  ">
+                    <label htmlFor="readingParaThird">Question Text</label>
+                    <input
+                      type="text"
+                      name={"matchingInfoQuesTitle"}
                       onChange={(e) => handleChange(e, i)}
                       value={
-                        testQuestions.matchingHeading[i]
-                          ?.matchingHeadingAnswerIndex
+                        testQuestions?.matchingInformation[i]
+                          ?.matchingInfoQuesTitle
                       }
-                      name={"matchingHeadingAnswerIndex"}
-                      type="number"
-                      id="correctChoiceIndex"
-                    >
-                      <option value="" selected>
-                        Select the correct index
-                      </option>
-                      {tags?.map((v, i) => (
-                        <>
-                          <option value={i}>{i || 0}</option>
-                        </>
-                      ))}
-                    </select>
+                      id={"questionText"}
+                      className="border border-gray-500"
+                    />
                   </div>
-                )}
-              </div>
+
+                  {matchingInformationValues.length > 0 && (
+                    <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                      <label htmlFor="readingParaThird">
+                        Correct Answer Index
+                      </label>
+                      <select
+                        className=" border w-full border-gray-500"
+                        onChange={(e) => handleChange(e, i)}
+                        value={
+                          testQuestions.matchingInformation[i]
+                            ?.matchingInfoAnswersIndex
+                        }
+                        name={"matchingInfoAnswersIndex"}
+                        type="number"
+                        id="correctChoiceIndex"
+                      >
+                        <option value="" selected>
+                          Select the correct index
+                        </option>
+                        {matchingInformationValues?.map((v, i) => (
+                          <>
+                            <option value={i}>{i}</option>
+                          </>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </>
             ))}
+
+            <button
+              onClick={(e) => addMoreMatchInfoQuestions(e)}
+              className="border bg-blue-300 p-1 rounded-sm text-white"
+            >
+              Add More Information Questions
+            </button>
           </div>
         </div>
       </form>
