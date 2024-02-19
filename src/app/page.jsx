@@ -27,14 +27,12 @@ const Page = () => {
       },
     ],
 
-
-
     headingAnswer: [""],
     matchingHeading: [
       {
         matchingHeadingQuesTitle: "",
         matchingHeadingAnswerIndex: 0,
-        matchHeadingsChoices: [""],
+        matchHeadingsChoices: [],
       },
     ],
   });
@@ -93,7 +91,10 @@ const Page = () => {
       return;
     }
 
-    if (name === "matchingHeadingQuesTitle" ||name === "matchingHeadingAnswerIndex") {
+    if (
+      name === "matchingHeadingQuesTitle" ||
+      name === "matchingHeadingAnswerIndex"
+    ) {
       const updatedTrueFalse = testQuestions?.matchingHeading?.map((v, i) => {
         if (i === id) {
           return { ...v, [name]: value };
@@ -105,30 +106,8 @@ const Page = () => {
       return;
     }
 
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
     setTestQuestions({ ...testQuestions, [name]: value });
   };
-
-
-
-
-
-
-
 
   // FUNCTIONS FOR ADDING GENERATING MORE TABS IN THE ARRAY------------------------------
   const addMorefaq = (e) => {
@@ -229,6 +208,23 @@ const Page = () => {
     copy.push(data);
     setTags(copy);
     setdata("");
+    setTestQuestions((prev) => {
+      const updatedMatchingHeading = prev.matchingHeading.map((mh) => {
+        const updatedMatchHeadingsChoices = tags.map((tag, tagsIndex) => {
+          return tagsIndex;
+        });
+
+        return {
+          ...mh,
+          matchHeadingsChoices: updatedMatchHeadingsChoices,
+        };
+      });
+
+      return {
+        ...prev,
+        matchingHeading: updatedMatchingHeading,
+      };
+    });
   };
 
   // Handle KeyDown Funcitons ------------/
@@ -244,19 +240,6 @@ const Page = () => {
     updatetags.splice(i, 1);
     setTags(updatetags);
   };
-
-
-
-
-
-  console.log(tags.indexOf)
-
-
-
-  
-  
-
-
 
   return (
     <div className="border border-red-300 p-6">
@@ -485,7 +468,7 @@ const Page = () => {
         {/* matching headings inputs her---------------------------------------e */}
 
         <div className=" border border-red-400 my-8 p-7">
-          <div className=" border border-yellow-300 mb-3">
+          <div className="  mb-3">
             <label
               className="text-sm text-gray-500 tracking-wider"
               htmlFor="tags"
@@ -543,32 +526,37 @@ const Page = () => {
                     className="border border-gray-500"
                   />
                 </div>
-                <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                  <label htmlFor="readingParaThird">Correct Answer Index</label>
-                  <input
-                    className=" border border-gray-500"
-                    onChange={(e) => handleChange(e, i)}
-                    value={
-                      testQuestions.matchingHeading[i]
-                        ?.matchingHeadingAnswerIndex
-                    }
-                    name={"matchingHeadingAnswerIndex"}
-                    type="number"
-                    id="correctChoiceIndex"
-                  />
-                </div>
+
+                {tags.length > 0 && (
+                  <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                    <label htmlFor="readingParaThird">
+                      Correct Answer Index
+                    </label>
+                    <select
+                      className=" border w-full border-gray-500"
+                      onChange={(e) => handleChange(e, i)}
+                      value={
+                        testQuestions.matchingHeading[i]
+                          ?.matchingHeadingAnswerIndex
+                      }
+                      name={"matchingHeadingAnswerIndex"}
+                      type="number"
+                      id="correctChoiceIndex"
+                    >
+                      <option value="" selected>
+                        Select the correct index
+                      </option>
+                      {tags?.map((v, i) => (
+                        <>
+                          <option value={i}>{i || 0}</option>
+                        </>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
-            ))} 
-
-
-                      <select name="" id=""></select>
-
+            ))}
           </div>
-
-
-
-
-
         </div>
       </form>
     </div>
