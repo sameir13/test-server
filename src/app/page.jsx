@@ -400,16 +400,7 @@ const Page = () => {
   // ends here------------------------------------------------------------------------
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const sendTestData = await axios.post("", {
-        ...testQuestions,
-        headingAnswer: tags,
-        infoAnswers: matchingInformationValues,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+      console.log(e)
   };
 
   return (
