@@ -14,13 +14,7 @@ const testSchema = new mongoose.Schema(
     readingParaOne: {
       type: String,
     },
-    readingParaSec: {
-      type: String,
-    },
-    readingParaThird: {
-      type: String,
-    },
-
+    
     /*mcqs based test question*/
     multipleChoice: [
       {
