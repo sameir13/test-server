@@ -43,8 +43,6 @@ const Page = () => {
     ],
   });
 
-  console.log(testQuestions);
-
   const handleChange = (e, id, index) => {
     const { name, value } = e.target;
 
@@ -131,88 +129,6 @@ const Page = () => {
     }
 
     setTestQuestions({ ...testQuestions, [name]: value });
-  };
-
-  // FUNCTIONS FOR ADDING GENERATING MORE TABS IN THE ARRAY------------------------------
-  const addMorefaq = (e) => {
-    e.preventDefault();
-
-    setTestQuestions((prev) => {
-      const updatedMultipleChoice = [
-        ...prev.multipleChoice,
-        {
-          questionText: "",
-          choices: [{ optionTitle: "", optionValue: "" }],
-          correctChoiceIndex: 0,
-        },
-      ];
-
-      return { ...prev, multipleChoice: updatedMultipleChoice };
-    });
-  };
-  const addMoreTrueFalse = (e) => {
-    e.preventDefault();
-    setTestQuestions((prev) => {
-      const newTrueFalseQuestion = [
-        ...prev.trueFalse,
-        {
-          trueFalseQuestion: "",
-          trueFalseChoices: [
-            { answerValue: 0 },
-            { answerValue: 1 },
-            { answerValue: 2 },
-          ],
-          trueFalseCorrectIndex: 0,
-        },
-      ];
-
-      return { ...prev, trueFalse: newTrueFalseQuestion };
-    });
-  };
-  const addMoreOpt = (e, id) => {
-    e.preventDefault();
-
-    setTestQuestions((prev) => ({
-      ...prev,
-      multipleChoice: prev.multipleChoice.map((mc, mcIndex) => {
-        if (mcIndex === id) {
-          return {
-            ...mc,
-            choices: [...mc.choices, { optionTitle: "", optionValue: "" }],
-          };
-        }
-        return mc;
-      }),
-    }));
-  };
-  const addMoreMatchHeadings = (e) => {
-    e.preventDefault();
-    setTestQuestions((prev) => {
-      const updatedHeadingQuestion = [
-        ...prev.matchingHeading,
-        {
-          matchingHeadingQuesTitle: "",
-          matchingHeadingAnswerIndex: 0,
-          matchHeadingsChoices: [],
-        },
-      ];
-
-      return { ...prev, matchingHeading: updatedHeadingQuestion };
-    });
-  };
-  const addMoreMatchInfoQuestions = (e) => {
-    e.preventDefault();
-    setTestQuestions((prev) => {
-      const afterAddingMoreInfoQuestions = [
-        ...prev.matchingInformation,
-        {
-          matchingInfoQuesTitle: "",
-          matchingInfoAnswersIndex: 0,
-          matchingInfoChoices: [],
-        },
-      ];
-      return { ...prev, matchingInformation: afterAddingMoreInfoQuestions };
-    });
   };
 
   // FUNCTIONS FOR REMOVING THE QUESTIONS-------
@@ -399,8 +315,93 @@ const Page = () => {
   };
   // ends here------------------------------------------------------------------------
 
+  // FUNCTIONS FOR ADDING GENERATING MORE TABS IN THE ARRAY------------------------------
+  const addMorefaq = (e) => {
+    e.preventDefault();
+
+    setTestQuestions((prev) => {
+      const updatedMultipleChoice = [
+        ...prev.multipleChoice,
+        {
+          questionText: "",
+          choices: [{ optionTitle: "", optionValue: "" }],
+          correctChoiceIndex: 0,
+        },
+      ];
+
+      return { ...prev, multipleChoice: updatedMultipleChoice };
+    });
+  };
+  const addMoreTrueFalse = (e) => {
+    e.preventDefault();
+    setTestQuestions((prev) => {
+      const newTrueFalseQuestion = [
+        ...prev.trueFalse,
+        {
+          trueFalseQuestion: "",
+          trueFalseChoices: [
+            { answerValue: 0 },
+            { answerValue: 1 },
+            { answerValue: 2 },
+          ],
+          trueFalseCorrectIndex: 0,
+        },
+      ];
+
+      return { ...prev, trueFalse: newTrueFalseQuestion };
+    });
+  };
+  const addMoreOpt = (e, id) => {
+    e.preventDefault();
+
+    setTestQuestions((prev) => ({
+      ...prev,
+      multipleChoice: prev.multipleChoice.map((mc, mcIndex) => {
+        if (mcIndex === id) {
+          return {
+            ...mc,
+            choices: [...mc.choices, { optionTitle: "", optionValue: "" }],
+          };
+        }
+        return mc;
+      }),
+    }));
+  };
+  const addMoreMatchHeadings = (e) => {
+    e.preventDefault();
+    setTestQuestions((prev) => {
+      const updatedHeadingQuestion = [
+        ...prev.matchingHeading,
+        {
+          matchingHeadingQuesTitle: "",
+          matchingHeadingAnswerIndex: 0,
+          matchHeadingsChoices: [],
+        },
+      ];
+
+      return { ...prev, matchingHeading: updatedHeadingQuestion };
+    });
+  };
+
+  const addMoreMatchInfoQuestions = (e) => {
+    e.preventDefault();
+    setTestQuestions((prev) => {
+      const afterAddingMoreInfoQuestions = [
+        ...prev.matchingInformation,
+        {
+          matchingInfoQuesTitle: "",
+          matchingInfoAnswersIndex: 0,
+          matchingInfoChoices: [],
+        },
+      ];
+
+      return { ...prev, matchingInformation: afterAddingMoreInfoQuestions };
+    });
+  };
+
   const handleSubmit = async (e) => {
-      console.log(e)
+    e.preventDefault();
+    console.log(testQuestions);
   };
 
   return (
@@ -853,6 +854,15 @@ const Page = () => {
               Add More Information Questions
             </button>
           </div>
+        </div>
+
+        <div className=" border-3 border-red-300 ">
+          <button
+            type="submit"
+            className=" rounded-sm shadow-lg bg-indigo-500 text-white text-md px-5 py-1"
+          >
+            Submit
+          </button>
         </div>
       </form>
     </div>
