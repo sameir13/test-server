@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import React from "react";
 
@@ -26,7 +27,6 @@ const Page = () => {
         trueFalseCorrectIndex: 0,
       },
     ],
-
     matchingHeading: [
       {
         matchingHeadingQuesTitle: "",
@@ -34,7 +34,6 @@ const Page = () => {
         matchHeadingsChoices: [],
       },
     ],
-
     matchingInformation: [
       {
         matchingInfoQuesTitle: "",
@@ -335,7 +334,9 @@ const Page = () => {
 
   // Matching Information answer options adding---------------------------------------
   const [infoData, setInfoData] = useState();
-  const [matchingInformationValues, setMatchingInformationValues] = useState([]);
+  const [matchingInformationValues, setMatchingInformationValues] = useState(
+    []
+  );
   const addInfoAnswers = (e) => {
     e.preventDefault();
     var copy = matchingInformationValues;
@@ -398,9 +399,22 @@ const Page = () => {
   };
   // ends here------------------------------------------------------------------------
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const sendTestData = await axios.post("", {
+        ...testQuestions,
+        headingAnswer: tags,
+        infoAnswers: matchingInformationValues,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="border border-red-300 p-6">
-      <form className=" max-w-[700px] p-4 m-auto">
+      <form onSubmit={handleSubmit} className=" max-w-[700px] p-4 m-auto">
         <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
           <label htmlFor="title">Title</label>
           <input
@@ -453,100 +467,96 @@ const Page = () => {
           <h3>MULTIPLE CHOICE QUESTIONS</h3>
 
           {testQuestions?.multipleChoice?.map((v, i) => (
-            <div
-              key={i}
-              className=" border border-yellow-600 my-6 p-3  relative"
-            >
-              <span
-                onClick={() => deleteMcqs(i)}
-                className={
-                  i > 0
-                    ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
-                    : " hidden"
-                }
-              >
-                remove
-              </span>
-              <div className="  mb-2 flex flex-col gap-2  ">
-                <label htmlFor="readingParaThird">Question Text</label>
-                <input
-                  type="text"
-                  name={"questionText"}
-                  onChange={(e) => handleChange(e, i)}
-                  value={testQuestions?.multipleChoice[i]?.questionText}
-                  id={"questionText"}
-                  className="border border-gray-500"
-                />
-              </div>
-              <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                <label htmlFor="readingParaThird">Correct Answer Index</label>
-                <input
-                  className=" border border-gray-500"
-                  onChange={(e) => handleChange(e, i)}
-                  value={testQuestions.multipleChoice[i].correctChoiceIndex}
-                  name={"correctChoiceIndex"}
-                  type="number"
-                  id="correctChoiceIndex"
-                />
-              </div>
+            <div key={i}>
+              <div className=" border border-yellow-600 my-6 p-3  relative">
+                <span
+                  onClick={() => deleteMcqs(i)}
+                  className={
+                    i > 0
+                      ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                      : " hidden"
+                  }
+                >
+                  remove
+                </span>
+                <div className="  mb-2 flex flex-col gap-2  ">
+                  <label htmlFor="readingParaThird">Question Text</label>
+                  <input
+                    type="text"
+                    name={"questionText"}
+                    onChange={(e) => handleChange(e, i)}
+                    value={testQuestions?.multipleChoice[i]?.questionText}
+                    id={"questionText"}
+                    className="border border-gray-500"
+                  />
+                </div>
+                <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                  <label htmlFor="readingParaThird">Correct Answer Index</label>
+                  <input
+                    className=" border border-gray-500"
+                    onChange={(e) => handleChange(e, i)}
+                    value={testQuestions.multipleChoice[i].correctChoiceIndex}
+                    name={"correctChoiceIndex"}
+                    type="number"
+                    id="correctChoiceIndex"
+                  />
+                </div>
 
-              <div className=" border rounded-sm p-2 my-5">
-                {v?.choices?.map((opt, j) => (
-                  <>
-                    <div
-                      key={j}
-                      className=" flex gap-7  bg-gray-300  my-3 p-3 relative"
-                    >
-                      <span
-                        className={
-                          j > 0
-                            ? " rounded-[100%] p-1 cursor-pointer  <text-2xlm></text-2xlm> text-red-400 absolute right-[-10px] top-[-10px]"
-                            : " hidden"
-                        }
-                        onClick={() => deleteMulipleChoiceOpts(i, j)}
-                      >
-                        X
-                      </span>
-                      <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                        <label htmlFor="readingParaThird">option title</label>
-
-                        <input
-                          className=" border border-gray-500"
-                          onChange={(e) => handleChange(e, i, j)}
-                          value={
-                            testQuestions?.multipleChoice[i].choices[j]
-                              .optionTitle
+                <div className=" border rounded-sm p-2 my-5">
+                  {v?.choices?.map((opt, j) => (
+                    <div key={j}>
+                      <div className=" flex gap-7  bg-gray-300  my-3 p-3 relative">
+                        <span
+                          className={
+                            j > 0
+                              ? " rounded-[100%] p-1 cursor-pointer  <text-2xlm></text-2xlm> text-red-400 absolute right-[-10px] top-[-10px]"
+                              : " hidden"
                           }
-                          name={"optionTitle"}
-                          type="text"
-                          id="correctChoiceIndex"
-                        />
-                      </div>
+                          onClick={() => deleteMulipleChoiceOpts(i, j)}
+                        >
+                          X
+                        </span>
+                        <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                          <label htmlFor="readingParaThird">option title</label>
 
-                      <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                        <label htmlFor="readingParaThird">option value</label>
-                        <input
-                          className=" border border-gray-500"
-                          onChange={(e) => handleChange(e, i, j)}
-                          value={
-                            testQuestions?.multipleChoice[i].choices[j]
-                              .optionValue
-                          }
-                          name={"optionValue"}
-                          type="text"
-                          id="optionValue"
-                        />
+                          <input
+                            className=" border border-gray-500"
+                            onChange={(e) => handleChange(e, i, j)}
+                            value={
+                              testQuestions?.multipleChoice[i].choices[j]
+                                .optionTitle
+                            }
+                            name={"optionTitle"}
+                            type="text"
+                            id="correctChoiceIndex"
+                          />
+                        </div>
+
+                        <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                          <label htmlFor="readingParaThird">option value</label>
+                          <input
+                            className=" border border-gray-500"
+                            onChange={(e) => handleChange(e, i, j)}
+                            value={
+                              testQuestions?.multipleChoice[i].choices[j]
+                                .optionValue
+                            }
+                            name={"optionValue"}
+                            type="text"
+                            id="optionValue"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </>
-                ))}
+                  ))}
+                </div>
+                <button
+                  className="border bg-blue-300 p-1 rounded-sm text-white"
+                  onClick={(e) => addMoreOpt(e, i)}
+                >
+                  Add More Option
+                </button>
               </div>
-              <button
-                className="border bg-blue-300 p-1 rounded-sm text-white"
-                onClick={(e) => addMoreOpt(e, i)}
-              >
-                Add More Option
-              </button>
             </div>
           ))}
           <button
@@ -585,16 +595,18 @@ const Page = () => {
             {tags?.length >= 1 && (
               <div className="border border-gray-400 my-3 p-2">
                 {tags.map((v, i) => (
-                  <div className="flex items-center gap-3" id={i}>
-                    <span>{i}</span> {" - "}
-                    <span>{v}</span>
-                    <span
-                      className=" text-sm text-red-800 cursor-pointer"
-                      onClick={() => handleDel(i)}
-                    >
-                      x
-                    </span>
-                    <i className="fa-solid fa-x"></i>
+                  <div key={i}>
+                    <div className="flex items-center gap-3">
+                      <span>{i}</span> {" - "}
+                      <span>{v}</span>
+                      <span
+                        className=" text-sm text-red-800 cursor-pointer"
+                        onClick={() => handleDel(i)}
+                      >
+                        x
+                      </span>
+                      <i className="fa-solid fa-x"></i>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -603,11 +615,8 @@ const Page = () => {
 
           <div>
             {testQuestions?.matchingHeading?.map((v, i) => (
-              <>
-                <div
-                  key={i}
-                  className=" border border-blue-400 my-3 p-5 relative"
-                >
+              <div key={i}>
+                <div className=" border border-blue-400 my-3 p-5 relative">
                   <span
                     onClick={() => deleteMatchHeadingQuestions(i)}
                     className={
@@ -648,20 +657,19 @@ const Page = () => {
                         name={"matchingHeadingAnswerIndex"}
                         type="number"
                         id="correctChoiceIndex"
+                        defaultValue={"DEFAULT"}
                       >
-                        <option value="" selected>
-                          Select the correct index
-                        </option>
-                        {tags?.map((v, i) => (
-                          <>
-                            <option value={i}>{i || 0}</option>
-                          </>
+                        <option value="DEFAULT" disabled></option>
+                        {tags?.map((v, tIndex) => (
+                          <option key={tIndex} value={tIndex}>
+                            {tIndex}
+                          </option>
                         ))}
                       </select>
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             ))}
           </div>
 
@@ -677,56 +685,59 @@ const Page = () => {
         <div className=" border border-red-400 my-7 p-4 ">
           <h1>TRUE FALSE</h1>
           {testQuestions?.trueFalse?.map((v, i) => (
-            <div
-              key={i}
-              className="  border border-yellow-400 my-4 p-5 relative"
-            >
-              <>
-                <span
-                  onClick={() => deleteTrueFalse(i)}
-                  className={
-                    i > 0
-                      ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
-                      : " hidden"
-                  }
-                >
-                  remove
-                </span>
-                <div className="  mb-2 flex flex-col gap-2   ">
-                  <label htmlFor="readingParaThird">Question Text</label>
-                  <input
-                    type="text"
-                    onChange={(e) => handleChange(e, i)}
-                    value={testQuestions?.trueFalse[i]?.trueFalseQuestion}
-                    id={"trueFalseQuestion"}
-                    name={"trueFalseQuestion"}
-                    className="border border-gray-500"
-                  />
-                </div>
-
-                <div className=" border p-1 my-4 flex justify-between">
-                  <span className=" text-sm text-gray-400">YES: 1</span>
-                  <span className=" text-sm text-gray-400">NO: 0</span>
-                  <span className=" text-sm text-gray-400">NOT GIVEN: 2</span>
-                </div>
-
-                <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                  <label htmlFor="readingParaThird">Correct Answer Index</label>
-
-                  <select
-                    className=" border border-gray-500"
-                    onChange={(e) => handleChange(e, i)}
-                    value={testQuestions.trueFalse[i].trueFalseCorrectIndex}
-                    name={"trueFalseCorrectIndex"}
-                    type="number"
-                    id="trueFalseCorrectIndex"
+            <div key={i}>
+              <div className="  border border-yellow-400 my-4 p-5 relative">
+                <>
+                  <span
+                    onClick={() => deleteTrueFalse(i)}
+                    className={
+                      i > 0
+                        ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                        : " hidden"
+                    }
                   >
-                    <option value={1}>YES</option>
-                    <option value={0}>NO</option>
-                    <option value={2}>NOT GIVEN</option>
-                  </select>
-                </div>
-              </>
+                    remove
+                  </span>
+                  <div className="  mb-2 flex flex-col gap-2   ">
+                    <label htmlFor="readingParaThird">Question Text</label>
+                    <input
+                      type="text"
+                      onChange={(e) => handleChange(e, i)}
+                      value={testQuestions?.trueFalse[i]?.trueFalseQuestion}
+                      id={"trueFalseQuestion"}
+                      name={"trueFalseQuestion"}
+                      className="border border-gray-500"
+                    />
+                  </div>
+
+                  <div className=" border p-1 my-4 flex justify-between">
+                    <span className=" text-sm text-gray-400">YES: 1</span>
+                    <span className=" text-sm text-gray-400">NO: 0</span>
+                    <span className=" text-sm text-gray-400">NOT GIVEN: 2</span>
+                  </div>
+
+                  <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                    <label htmlFor="readingParaThird">
+                      Correct Answer Index
+                    </label>
+
+                    <select
+                      className=" border border-gray-500"
+                      onChange={(e) => handleChange(e, i)}
+                      value={testQuestions.trueFalse[i].trueFalseCorrectIndex}
+                      name={"trueFalseCorrectIndex"}
+                      type="number"
+                      id="trueFalseCorrectIndex"
+                      defaultValue={"DEFAULT"}
+                    >
+                      <option value={"DEFAULT"}>Select the index....</option>
+                      <option value={1}>YES</option>
+                      <option value={0}>NO</option>
+                      <option value={2}>NOT GIVEN</option>
+                    </select>
+                  </div>
+                </>
+              </div>
             </div>
           ))}
 
@@ -738,6 +749,7 @@ const Page = () => {
           </button>
         </div>
 
+        {/* MATCHING THE INFORMATION FORM-------------------------------------------------------------- */}
         <div className="border border-red-400 my-7 p-4">
           <h1>MATCH THE INFORMATON QUESTIONS</h1>
 
@@ -766,7 +778,7 @@ const Page = () => {
             {matchingInformationValues?.length >= 1 && (
               <div className="border border-gray-400 my-3 p-2">
                 {matchingInformationValues?.map((v, i) => (
-                  <div className="flex items-center gap-3" id={i}>
+                  <div className="flex items-center gap-3" key={i}>
                     <span>{i}</span> {" - "}
                     <span>{v}</span>
                     <span
@@ -784,11 +796,8 @@ const Page = () => {
 
           <div>
             {testQuestions?.matchingInformation?.map((v, i) => (
-              <>
-                <div
-                  key={i}
-                  className=" border border-blue-400 my-3 p-5 relative"
-                >
+              <div key={i}>
+                <div className=" border border-blue-400 my-3 p-5 relative">
                   <span
                     onClick={() => deleteMatchInfoQuestions(i)}
                     className={
@@ -829,20 +838,21 @@ const Page = () => {
                         name={"matchingInfoAnswersIndex"}
                         type="number"
                         id="correctChoiceIndex"
+                        defaultValue={"DEFAULT"}
                       >
-                        <option value="" selected>
-                          Select the correct index
+                        <option value="DEFAULT" disabled>
+                          Select the index.....
                         </option>
-                        {matchingInformationValues?.map((v, i) => (
-                          <>
-                            <option value={i}>{i}</option>
-                          </>
+                        {matchingInformationValues?.map((v, mIndex) => (
+                          <option key={mIndex} value={mIndex}>
+                            {mIndex}
+                          </option>
                         ))}
                       </select>
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             ))}
 
             <button

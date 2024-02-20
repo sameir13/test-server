@@ -42,14 +42,12 @@ const testSchema = new mongoose.Schema(
       },
     ],
 
-
-    
     /*Match The information questions*/
     headingAnswer: [{ type: String }],
     matchingHeading: [
       {
         matchingHeadingQuesTitle: { type: String },
-        matchHeadingsChoices: [{type:Number}],
+        matchHeadingsChoices: [{ type: Number }],
         matchingHeadingAnswerIndex: {
           type: Number,
           required: true,
@@ -57,13 +55,6 @@ const testSchema = new mongoose.Schema(
         },
       },
     ],
-
-
-
-
-
-
-
 
     /*yes no and not given questions*/
     trueFalse: [
@@ -94,22 +85,18 @@ const testSchema = new mongoose.Schema(
 
     /*Match The information questions*/
 
-    infoAnswers: [{type:String}],
+    infoAnswers: [{ type: String }],
     matchingInformation: [
-          {
-            matchingInfoQuesTitle: { type: String },
-            matchingInfoChoices: [{type:Number}],
-            matchingInfoAnswersIndex: {
-              type: Number,
-              required: true,
-              min: 0,
-            },
-          },
-        ],
-      
-   
-
-
+      {
+        matchingInfoQuesTitle: { type: String },
+        matchingInfoChoices: [{ type: Number }],
+        matchingInfoAnswersIndex: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
