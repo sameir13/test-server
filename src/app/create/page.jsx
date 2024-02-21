@@ -1,9 +1,8 @@
 "use client";
 import axios from "axios";
-import { Editor } from "@tinymce/tinymce-react";
 import { useState, useEffect } from "react";
+import { Editor } from "@tinymce/tinymce-react";
 import { toast, Toaster } from "react-hot-toast";
-import Input from "@/components/Input";
 
 const Page = () => {
   const [isLoading, setIsloading] = useState(false);
@@ -43,8 +42,6 @@ const Page = () => {
       },
     ],
   });
-
-  console.log(testQuestions);
 
   const handleChange = (e, id, index) => {
     const { name, value, type, checked } = e.target;
@@ -478,29 +475,39 @@ const Page = () => {
     }
   };
 
+  const [hasValue, setHasValue] = useState("");
+
   return (
     <>
       <Toaster />
-      <Input />
       <div className="border border-red-300 p-6">
         <form onSubmit={handleSubmit} className=" max-w-[700px] p-4 m-auto">
-          <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-            <label htmlFor="title">Title</label>
+          {/* -------------------- Title Here -------------------- */}
+          <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2 relative">
+            <label htmlFor="title" className="text-sm text-slate-600">
+              Title
+            </label>
             <input
               id="title"
-              className="border border-gray-500"
               type="text"
-              value={testQuestions.title}
               name="title"
               onChange={handleChange}
+              value={testQuestions.title}
+              placeholder="Test Title"
+              className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
             />
           </div>
 
+          {/* -------------------- Para Here -------------------- */}
           <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-            <label htmlFor="readingParaOne">para 1</label>
+            <label
+              className="text-sm text-slate-600 mt-3"
+              htmlFor="readingParaOne"
+            >
+              Para 01
+            </label>
 
-            {/* Editor */}
-            <div className="col-span-2">
+            <div className="">
               <Editor
                 apiKey="6wwym50hu15el3wtfbs5l75ohsc40iytt3b5uos0iqrhnzle"
                 value={testQuestions.readingParaOne}
@@ -545,8 +552,10 @@ const Page = () => {
           </div>
 
           {/* ----------------------- MCQ'S ------------------------------------------------------------------------------------------------- */}
-          <div className="my-7 p-7 border rounded-lg">
-            <h3>MULTIPLE CHOICE QUESTIONS</h3>
+          <div className="my-7 p-5 border rounded-lg">
+            <h3 className=" font-semibold text-slate-700">
+              MULTIPLE CHOICE QUESTIONS
+            </h3>
 
             {testQuestions?.multipleChoice?.map((v, i) => (
               <div key={i}>
@@ -559,57 +568,68 @@ const Page = () => {
                         : " hidden"
                     }
                   >
-                    remove
+                    Remove
                   </span>
-                  <div className="  mb-2 flex flex-col gap-2  ">
-                    <label htmlFor="readingParaThird">Question Text</label>
+                  <div className="  mb-2 flex flex-col gap-2 ">
+                    <label
+                      className="text-sm text-slate-600"
+                      htmlFor="readingParaThird"
+                    >
+                      Question Text
+                    </label>
                     <input
                       type="text"
                       name={"questionText"}
                       onChange={(e) => handleChange(e, i)}
                       value={testQuestions?.multipleChoice[i]?.questionText}
                       id={"questionText"}
-                      className="border border-gray-500"
+                      className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                     />
                   </div>
-                  <div className=" border rounded-sm p-2 my-5">
+                  <div className=" border rounded-lg p-3 my-5 bg-[#ffffffa1]">
                     {v?.choices?.map((opt, j) => (
-                      <div key={j}>
-                        <div className=" flex gap-7  bg-gray-300  my-3 p-3 relative">
+                      <div key={j} className=" mb-6 border-b pb-4">
+                        <div className="flex gap-7 relative">
                           <span
                             className={
                               j > 0
-                                ? " rounded-[100%] p-1 cursor-pointer  <text-2xlm></text-2xlm> text-red-400 absolute right-[-10px] top-[-10px]"
-                                : " hidden"
+                                ? "rounded-[100%] cursor-pointer absolute right-[-10px] top-[-10px]"
+                                : "hidden"
                             }
                             onClick={() => deleteMulipleChoiceOpts(i, j)}
                           >
-                            X
+                            <i className="fa-solid fa-xmark absolute top-0 right-3 text-gray-400 hover:text-gray-500"></i>
                           </span>
-                          <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                            <label htmlFor="readingParaThird">
-                              option title
+                          <div className="mb-2 flex flex-col flex-1 gap-2">
+                            <label
+                              className="text-xs text-slate-600"
+                              htmlFor="readingParaThird"
+                            >
+                              Otion Title
                             </label>
 
                             <input
-                              className=" border border-gray-500"
+                              type="text"
+                              name={"optionTitle"}
+                              id="correctChoiceIndex"
                               onChange={(e) => handleChange(e, i, j)}
                               value={
                                 testQuestions?.multipleChoice[i].choices[j]
                                   .optionTitle
                               }
-                              name={"optionTitle"}
-                              type="text"
-                              id="correctChoiceIndex"
+                              className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                             />
                           </div>
 
                           <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                            <label htmlFor="readingParaThird">
-                              option value
+                            <label
+                              className="text-xs text-slate-600"
+                              htmlFor="readingParaThird"
+                            >
+                              Option Value
                             </label>
                             <input
-                              className=" border border-gray-500"
+                              className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                               onChange={(e) => handleChange(e, i, j)}
                               value={
                                 testQuestions?.multipleChoice[i].choices[j]
@@ -622,79 +642,78 @@ const Page = () => {
                           </div>
                         </div>
 
-                        <div className="flex items-center">
-                          <label
-                            htmlFor={`checkbox-${i}-${j}`}
-                            className="mr-2"
-                          >
-                            Set as Correct
-                          </label>
+                        <div className="flex gap-2 items-center py-2">
                           <input
-                            id={`checkbox-${i}-${j}`}
                             type="checkbox"
+                            className="rounded"
+                            id={`checkbox-${i}-${j}`}
                             checked={j === v.correctChoiceIndex}
                             onChange={() => handleCheckboxChange(i, j)}
                           />
+                          <label
+                            htmlFor={`checkbox-${i}-${j}`}
+                            className=" text-slate-700 text-sm"
+                          >
+                            Set as Correct
+                          </label>
                         </div>
                       </div>
                     ))}
                   </div>
                   <button
-                    className="border bg-blue-300 p-1 rounded-sm text-white"
                     onClick={(e) => addMoreOpt(e, i)}
+                    className="border border-gray-300 text-sm px-3 py-2 my-1 rounded-md text-gray-500 hover:text-gray-600 transition duration-150"
                   >
-                    Add More Option
+                    Add More
                   </button>
                 </div>
               </div>
             ))}
             <button
-              className="border bg-blue-300 p-1 rounded-sm text-white"
               onClick={(e) => addMorefaq(e)}
+              className="bg-indigo-500 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
             >
               Add More Question
             </button>
           </div>
 
           {/* ----------------------- matching headings inputs her---------------------------------------e */}
-          {/* <div className=" border border-red-400 my-8 p-7">
-            <h1 className=" mb-5">MATCH THE HEADING QUESTIONS </h1>
-            <div className="  mb-3">
-              <label
-                className="text-sm text-gray-500 tracking-wider"
-                htmlFor="tags"
-              >
+          <div className=" my-7 p-5 border rounded-lg">
+            <h1 className=" font-semibold text-slate-700">
+              MATCH THE HEADING QUESTIONS{" "}
+            </h1>
+            <div className="border rounded-lg bg-[#eeeeeeba] my-6 p-3  relative">
+              <label className="text-sm text-slate-600" htmlFor="tags">
                 Answer Options
               </label>
 
-              <div className="input">
+              <div className="input my-3">
                 <div className="inputbox">
                   <input
                     id="tags"
-                    value={data}
                     type="text"
+                    value={data}
                     placeholder="Add Tags"
                     onKeyDown={handlekeydown}
                     onChange={(e) => setdata(e.target.value)}
-                    className=" border p-2 w-full rounded-md mt-1 text-gray-400 focus:text-gray-500 placeholder:text-gray-300 outline-none focus:ring-2"
+                    className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                   />
                 </div>
               </div>
 
               {tags?.length >= 1 && (
-                <div className="border border-gray-400 my-3 p-2">
+                <div className="bg-white flex flex-wrap gap-2 rounded-lg my-3 px-2 py-3">
                   {tags.map((v, i) => (
                     <div key={i}>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 text-gray-600 bg-indigo-100 text-sm px-3 py-1.5 rounded-lg">
                         <span>{alphabetsArray[i]}</span> {" - "}
                         <span>{v}</span>
                         <span
-                          className=" text-sm text-red-800 cursor-pointer"
                           onClick={() => handleDel(i)}
+                          className=" text-sm cursor-pointer"
                         >
-                          x
+                          <i className="fa-solid fa-x text-xs text-gray-400 hover:text-gray-600"></i>
                         </span>
-                        <i className="fa-solid fa-x"></i>
                       </div>
                     </div>
                   ))}
@@ -705,19 +724,24 @@ const Page = () => {
             <div>
               {testQuestions?.matchingHeading?.map((v, i) => (
                 <div key={i}>
-                  <div className=" border border-blue-400 my-3 p-5 relative">
+                  <div className="border rounded-lg my-3 p-5 relative bg-[#eeeeeeba]">
                     <span
                       onClick={() => deleteMatchHeadingQuestions(i)}
                       className={
                         i > 0
-                          ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                          ? " cursor-pointer absolute right-5 top-1"
                           : " hidden"
                       }
                     >
-                      remove
+                      <i className="fa-solid fa-x text-xs text-gray-400 hover:text-gray-600  hover:scale-110 transition-all duration-100"></i>
                     </span>
-                    <div className="  mb-2 flex flex-col gap-2  ">
-                      <label htmlFor="readingParaThird">Question Text</label>
+                    <div className="mb-2 flex flex-col gap-3">
+                      <label
+                        htmlFor="readingParaThird"
+                        className="text-xs text-slate-600"
+                      >
+                        Question Text
+                      </label>
                       <input
                         type="text"
                         name={"matchingHeadingQuesTitle"}
@@ -727,17 +751,21 @@ const Page = () => {
                             ?.matchingHeadingQuesTitle
                         }
                         id={"questionText"}
-                        className="border border-gray-500"
+                        placeholder="Test Question Text"
+                        className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                       />
                     </div>
 
                     {tags.length > 0 && (
                       <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                        <label htmlFor="readingParaThird">
+                        <label
+                          className="text-xs text-slate-600 mt-3"
+                          htmlFor="readingParaThird"
+                        >
                           Correct Answer Index
                         </label>
                         <select
-                          className=" border w-full border-gray-500"
+                          className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                           onChange={(e) => handleChange(e, i)}
                           value={
                             testQuestions.matchingHeading[i]
@@ -763,55 +791,60 @@ const Page = () => {
             </div>
 
             <button
-              className="border bg-blue-300 p-1 rounded-sm text-white"
               onClick={(e) => addMoreMatchHeadings(e)}
+              className="bg-indigo-500 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
             >
               Add More Questions
             </button>
-          </div> */}
+          </div>
 
           {/* ----------------------- true False Form ------------------------------------------------------------------------------------*/}
-          {/* <div className=" border border-red-400 my-7 p-4 ">
-            <h1>TRUE FALSE</h1>
+          <div className="my-7 p-5 border rounded-lg">
+            <h3 className=" font-semibold text-slate-700">TRUE FALSE</h3>
             {testQuestions?.trueFalse?.map((v, i) => (
               <div key={i}>
-                <div className=" flex items-center border border-yellow-400 my-4 p-5 relative">
+                <div className=" flex items-center  border rounded-lg bg-[#eeeeeeba] my-6 p-3  relative">
                   <>
                     <span
                       onClick={() => deleteTrueFalse(i)}
                       className={
                         i > 0
-                          ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                          ? " rounded-[100%] p-1 cursor-pointer absolute right-2 top-1 hover:text-gray-600 hover:scale-110 transition duration-150"
                           : " hidden"
                       }
                     >
-                      remove
+                      <i className="fa-solid fa-x text-xs text-gray-400 hover:text-gray-600"></i>
                     </span>
-                    <div className=" flex-1  mb-2 flex flex-col gap-2   ">
-                      <label htmlFor="readingParaThird">Question Text</label>
+                    <div className=" flex-1 mb-2 flex flex-col gap-2">
+                      <label
+                        className="text-xs text-slate-600"
+                        htmlFor="readingParaThird"
+                      >
+                        Question Text
+                      </label>
                       <input
                         type="text"
                         onChange={(e) => handleChange(e, i)}
                         value={testQuestions?.trueFalse[i]?.trueFalseQuestion}
                         id={"trueFalseQuestion"}
                         name={"trueFalseQuestion"}
-                        className="border border-gray-500"
+                        className="border z-10 mt-2 w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md rounded-r-none px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1"
                       />
                     </div>
 
                     <div className=" flex-2 border-3 border-black mb-2 flex flex-col gap-2">
-                      <label htmlFor="readingParaThird" className=" invisible">
+                      <label htmlFor="readingParaThird" className="invisible">
                         Correct Answer Index
                       </label>
 
                       <select
-                        className=" border border-gray-500 py-[1.1px]"
+                        type="number"
+                        defaultValue={"DEFAULT"}
+                        id="trueFalseCorrectIndex"
+                        name={"trueFalseCorrectIndex"}
                         onChange={(e) => handleChange(e, i)}
                         value={testQuestions.trueFalse[i].trueFalseCorrectIndex}
-                        name={"trueFalseCorrectIndex"}
-                        type="number"
-                        id="trueFalseCorrectIndex"
-                        defaultValue={"DEFAULT"}
+                        className="border w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md rounded-l-none px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1"
                       >
                         <option value={"DEFAULT"}>Select the index....</option>
                         <option value={1}>YES</option>
@@ -825,18 +858,20 @@ const Page = () => {
             ))}
 
             <button
-              className="border bg-blue-300 p-1 rounded-sm text-white"
               onClick={(e) => addMoreTrueFalse(e)}
+              className="bg-indigo-500 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
             >
               Add More True False Questions
             </button>
-          </div> */}
+          </div>
 
           {/* ----------------------- MATCHING THE INFORMATION FORM-------------------------------------------------------------- */}
-          {/* <div className="border border-red-400 my-7 p-4">
-            <h1>MATCH THE INFORMATON QUESTIONS</h1>
+          <div className="my-7 p-5 border rounded-lg">
+            <h1 className=" font-semibold text-slate-700 mb-3">
+              MATCH THE INFORMATON QUESTIONS
+            </h1>
 
-            <div className="my-5">
+            <div className="py-5 px-4 border rounded-lg bg-[#eeeeeeba]">
               <label
                 className="text-sm text-gray-500 tracking-wider"
                 htmlFor="tags"
@@ -844,7 +879,7 @@ const Page = () => {
                 Answer Options
               </label>
 
-              <div className="input">
+              <div className="input mt-2">
                 <div className="inputbox">
                   <input
                     id="tags"
@@ -853,7 +888,7 @@ const Page = () => {
                     placeholder="Add Tags"
                     onKeyDown={handleEnterDown}
                     onChange={(e) => setInfoData(e.target.value)}
-                    className=" border p-2 w-full rounded-md mt-1 text-gray-400 focus:text-gray-500 placeholder:text-gray-300 outline-none focus:ring-2"
+                    className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                   />
                 </div>
               </div>
@@ -880,7 +915,7 @@ const Page = () => {
             <div>
               {testQuestions?.matchingInformation?.map((v, i) => (
                 <div key={i}>
-                  <div className=" border border-blue-400 my-3 p-5 relative">
+                  <div className="  border rounded-lg bg-[#eeeeeeba] my-3 p-5 relative">
                     <span
                       onClick={() => deleteMatchInfoQuestions(i)}
                       className={
@@ -892,7 +927,12 @@ const Page = () => {
                       remove
                     </span>
                     <div className="  mb-2 flex flex-col gap-2  ">
-                      <label htmlFor="readingParaThird">Question Text</label>
+                      <label
+                        className="text-sm text-gray-500 tracking-wider"
+                        htmlFor="readingParaThird"
+                      >
+                        Question Text
+                      </label>
                       <input
                         type="text"
                         name={"matchingInfoQuesTitle"}
@@ -902,7 +942,7 @@ const Page = () => {
                             ?.matchingInfoQuesTitle
                         }
                         id={"questionText"}
-                        className="border border-gray-500"
+                        className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                       />
                     </div>
 
@@ -940,22 +980,22 @@ const Page = () => {
 
               <button
                 onClick={(e) => addMoreMatchInfoQuestions(e)}
-                className="border bg-blue-300 p-1 rounded-sm text-white"
+                className="bg-indigo-500 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
               >
                 Add More Information Questions
               </button>
             </div>
-          </div> */}
+          </div>
 
-          {/* <div className=" border-3 border-red-300 ">
+          <div className=" border-3 border-red-300 ">
             <button
               type="submit"
-              className=" rounded-sm shadow-lg bg-indigo-500 text-white text-md px-5 py-1"
               disabled={isLoading}
+              className="bg-indigo-600 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
             >
               {isLoading ? "Processing...." : "Submit"}
             </button>
-          </div> */}
+          </div>
         </form>
       </div>
     </>
