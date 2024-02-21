@@ -2,8 +2,10 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import React from "react";
+import { toast, Toaster } from "react-hot-toast";
 
 const Page = () => {
+  const [isLoading, setIsloading] = useState(false);
   const [testQuestions, setTestQuestions] = useState({
     title: "",
     readingParaOne: "",
@@ -419,11 +421,6 @@ const Page = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(testQuestions);
-  };
-
   // alphabets array for the choices
   const alphabetsArray = [
     "a",
@@ -485,35 +482,62 @@ const Page = () => {
 
 
 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setIsloading(true);
+      const sendDataToDb = await axios.post("http://localhost:3000/api/test", {
+        ...testQuestions,
+        headingAnswer: tags,
+        infoAnswers: matchingInformationValues,
+      });
+
+      // console.log(sendDataToDb?.data?.success)
+      if(sendDataToDb?.data?.success){
+        toast.success("Test Upload Successfully")
+      }
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message);
+      }
+    } finally {
+      setIsloading(false);
+    }
+  }
+  
   return (
-    <div className="border border-red-300 p-6">
-      <form onSubmit={handleSubmit} className=" max-w-[700px] p-4 m-auto">
-        <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-          <label htmlFor="title">Title</label>
-          <input
-            id="title"
-            className="border border-gray-500"
-            type="text"
-            value={testQuestions.title}
-            name="title"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-          <label htmlFor="readingParaOne">para 1</label>
-          <input
-            className=" border border-gray-500"
-            onChange={handleChange}
-            type="text"
-            name="readingParaOne"
-            value={testQuestions.readingParaOne}
-            id="readingParaOne"
-          />
-        </div>
+    <>
+      <Toaster />
+      <div className="border border-red-300 p-6">
+        <form onSubmit={handleSubmit} className=" max-w-[700px] p-4 m-auto">
+          <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+            <label htmlFor="title">Title</label>
+            <input
+              id="title"
+              className="border border-gray-500"
+              type="text"
+              value={testQuestions.title}
+              name="title"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+            <label htmlFor="readingParaOne">para 1</label>
+            <input
+              className=" border border-gray-500"
+              onChange={handleChange}
+              type="text"
+              name="readingParaOne"
+              value={testQuestions.readingParaOne}
+              id="readingParaOne"
+            />
+          </div>
 
-        {/* ADDING THE TABS FOR THE RENDERING CONDITIONS----------------------------------------------------- */}
+          {/* ADDING THE TABS FOR THE RENDERING CONDITIONS----------------------------------------------------- */}
 
-        {/* <div className="  my-5 flex justify-center items-center ">
+          {/* <div className="  my-5 flex justify-center items-center ">
           {selectTypeRendering?.map((v, i) => (
             <div key={i} className=" ">
               <button
@@ -526,9 +550,9 @@ const Page = () => {
           ))}
         </div> */}
 
-        {/* FORM HANDLING FOR THE ARRAYS IN THE USESTATES ---------------------------------------------------------------------------------------------------------------------------------- */}
+          {/* FORM HANDLING FOR THE ARRAYS IN THE USESTATES ---------------------------------------------------------------------------------------------------------------------------------- */}
 
-        {/* mcqs------------------------------------------------------------------------------------------------- */}
+          {/* mcqs------------------------------------------------------------------------------------------------- */}
           <div className="my-7 p-7 border border-green-500">
             <h3>MULTIPLE CHOICE QUESTIONS</h3>
 
@@ -640,7 +664,7 @@ const Page = () => {
             </button>
           </div>
 
-        {/* matching headings inputs her---------------------------------------e */}
+          {/* matching headings inputs her---------------------------------------e */}
           <div className=" border border-red-400 my-8 p-7">
             <h1 className=" mb-5">MATCH THE HEADING QUESTIONS </h1>
             <div className="  mb-3">
@@ -754,7 +778,7 @@ const Page = () => {
             </button>
           </div>
 
-        {/* true False Form ------------------------------------------------------------------------------------*/}
+          {/* true False Form ------------------------------------------------------------------------------------*/}
           <div className=" border border-red-400 my-7 p-4 ">
             <h1>TRUE FALSE</h1>
             {testQuestions?.trueFalse?.map((v, i) => (
@@ -815,9 +839,8 @@ const Page = () => {
               Add More True False Questions
             </button>
           </div>
-      
 
-        {/* MATCHING THE INFORMATION FORM-------------------------------------------------------------- */}
+          {/* MATCHING THE INFORMATION FORM-------------------------------------------------------------- */}
           <div className="border border-red-400 my-7 p-4">
             <h1>MATCH THE INFORMATON QUESTIONS</h1>
 
@@ -932,18 +955,18 @@ const Page = () => {
             </div>
           </div>
 
-        
           <div className=" border-3 border-red-300 ">
             <button
               type="submit"
               className=" rounded-sm shadow-lg bg-indigo-500 text-white text-md px-5 py-1"
+              disabled={isLoading}
             >
-              Submit
+              {isLoading ? "Processing...." : "Submit"}
             </button>
           </div>
-    
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 };
 
