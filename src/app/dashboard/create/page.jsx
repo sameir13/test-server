@@ -1,9 +1,8 @@
 "use client";
 import axios from "axios";
-import { Editor } from "@tinymce/tinymce-react";
 import { useState, useEffect } from "react";
+import React from "react";
 import { toast, Toaster } from "react-hot-toast";
-import Input from "@/components/Input";
 
 const Page = () => {
   const [isLoading, setIsloading] = useState(false);
@@ -43,8 +42,6 @@ const Page = () => {
       },
     ],
   });
-
-  console.log(testQuestions);
 
   const handleChange = (e, id, index) => {
     const { name, value, type, checked } = e.target;
@@ -454,6 +451,35 @@ const Page = () => {
     "z",
   ];
 
+  // const [rendering, setRendering] = useState([0]);
+
+  // const selectTypeRendering = [
+  //   {
+  //     lable: "Multiple Choice Questions",
+  //     typeKey: 1,
+  //   },
+  //   {
+  //     lable: "Match The Heading",
+  //     typeKey: 2,
+  //   },
+  //   {
+  //     lable: "True false",
+  //     typeKey: 3,
+  //   },
+  //   {
+  //     lable: "Match The Information",
+  //     typeKey: 4,
+  //   },
+  // ];
+  // const handleTabClick = (typeKey) => {
+  //   setRendering((prevRendering) => {
+  //     if (!prevRendering.find((tab) => tab.typeKey === typeKey)) {
+  //       return [...prevRendering, typeKey];
+  //     }
+  //     return prevRendering;
+  //   });
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -481,7 +507,6 @@ const Page = () => {
   return (
     <>
       <Toaster />
-      <Input />
       <div className="border border-red-300 p-6">
         <form onSubmit={handleSubmit} className=" max-w-[700px] p-4 m-auto">
           <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
@@ -498,59 +523,40 @@ const Page = () => {
 
           <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
             <label htmlFor="readingParaOne">para 1</label>
-
-            {/* Editor */}
-            <div className="col-span-2">
-              <Editor
-                apiKey="6wwym50hu15el3wtfbs5l75ohsc40iytt3b5uos0iqrhnzle"
-                value={testQuestions.readingParaOne}
-                onEditorChange={(content) =>
-                  setTestQuestions({
-                    ...testQuestions,
-                    readingParaOne: content,
-                  })
-                }
-                init={{
-                  height: 300,
-                  menubar: false,
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "code",
-                    "help",
-                    "wordcount",
-                  ],
-                  toolbar:
-                    "undo redo blocks " +
-                    "bullist numlist " +
-                    "table image removeformat code fullscreen",
-                  content_style:
-                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                }}
-              />
-            </div>
+            <input
+              className=" border border-gray-500"
+              onChange={handleChange}
+              type="text"
+              name="readingParaOne"
+              value={testQuestions.readingParaOne}
+              id="readingParaOne"
+            />
           </div>
 
-          {/* ----------------------- MCQ'S ------------------------------------------------------------------------------------------------- */}
-          <div className="my-7 p-7 border rounded-lg">
+          {/* ADDING THE TABS FOR THE RENDERING CONDITIONS----------------------------------------------------- */}
+
+          {/* <div className="  my-5 flex justify-center items-center ">
+          {selectTypeRendering?.map((v, i) => (
+            <div key={i} className=" ">
+              <button
+                className="   border text-white bg-indigo-500 text-sm shadow-lg px-2 py-1 rounded-sm"
+                onClick={() => handleTabClick(v.typeKey)}
+              >
+                {v.lable}
+              </button>
+            </div>
+          ))}
+        </div> */}
+
+          {/* FORM HANDLING FOR THE ARRAYS IN THE USESTATES ---------------------------------------------------------------------------------------------------------------------------------- */}
+
+          {/* mcqs------------------------------------------------------------------------------------------------- */}
+          <div className="my-7 p-7 border border-green-500">
             <h3>MULTIPLE CHOICE QUESTIONS</h3>
 
             {testQuestions?.multipleChoice?.map((v, i) => (
               <div key={i}>
-                <div className=" border rounded-lg bg-[#eeeeeeba] my-6 p-3  relative">
+                <div className=" border border-yellow-600 my-6 p-3  relative">
                   <span
                     onClick={() => deleteMcqs(i)}
                     className={
@@ -656,8 +662,8 @@ const Page = () => {
             </button>
           </div>
 
-          {/* ----------------------- matching headings inputs her---------------------------------------e */}
-          {/* <div className=" border border-red-400 my-8 p-7">
+          {/* matching headings inputs her---------------------------------------e */}
+          <div className=" border border-red-400 my-8 p-7">
             <h1 className=" mb-5">MATCH THE HEADING QUESTIONS </h1>
             <div className="  mb-3">
               <label
@@ -768,10 +774,10 @@ const Page = () => {
             >
               Add More Questions
             </button>
-          </div> */}
+          </div>
 
-          {/* ----------------------- true False Form ------------------------------------------------------------------------------------*/}
-          {/* <div className=" border border-red-400 my-7 p-4 ">
+          {/* true False Form ------------------------------------------------------------------------------------*/}
+          <div className=" border border-red-400 my-7 p-4 ">
             <h1>TRUE FALSE</h1>
             {testQuestions?.trueFalse?.map((v, i) => (
               <div key={i}>
@@ -830,10 +836,10 @@ const Page = () => {
             >
               Add More True False Questions
             </button>
-          </div> */}
+          </div>
 
-          {/* ----------------------- MATCHING THE INFORMATION FORM-------------------------------------------------------------- */}
-          {/* <div className="border border-red-400 my-7 p-4">
+          {/* MATCHING THE INFORMATION FORM-------------------------------------------------------------- */}
+          <div className="border border-red-400 my-7 p-4">
             <h1>MATCH THE INFORMATON QUESTIONS</h1>
 
             <div className="my-5">
@@ -945,9 +951,9 @@ const Page = () => {
                 Add More Information Questions
               </button>
             </div>
-          </div> */}
+          </div>
 
-          {/* <div className=" border-3 border-red-300 ">
+          <div className=" border-3 border-red-300 ">
             <button
               type="submit"
               className=" rounded-sm shadow-lg bg-indigo-500 text-white text-md px-5 py-1"
@@ -955,7 +961,7 @@ const Page = () => {
             >
               {isLoading ? "Processing...." : "Submit"}
             </button>
-          </div> */}
+          </div>
         </form>
       </div>
     </>
