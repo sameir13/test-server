@@ -2,13 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* Aside Animation Button */
+.asideAnimate {
+  animation-name: slide;
+  animation-duration: 1.5s;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0px);
   }
 }
