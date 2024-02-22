@@ -10,23 +10,19 @@ export async function middleware(req, res) {
 
   var publicRoutes = ["/dasboard"];
 
-  // if (!AccessToken && !publicRoutes.includes(pathname)) {
-  //   if (pathname.startsWith("/api/")) {
-  //     return NextResponse.json({
-  //       success: false,
-  //       message: "Your are not Authorized!",
-  //     });
-  //   }
-  //   return NextResponse.redirect(new URL("/", req.url));
+  if (!AccessToken && !publicRoutes.includes(pathname)) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({
+        success: false,
+        message: "Your are not Authorized!",
+      });
+    }
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // if (AccessToken && pathname === "/") {
+  //   return NextResponse.redirect(new URL("/dashboard", req.url));
   // }
-
-
-
-
-  
-//   if (AccessToken && pathname === "/dasboard") {
-//     return NextResponse.redirect(new URL("/", req.url));
-//   }
 }
 
 export const config = {
