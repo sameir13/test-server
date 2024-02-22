@@ -563,16 +563,16 @@ const Page = () => {
 
           {testQuestions?.multipleChoice?.map((v, i) => (
             <div key={i}>
-              <div className=" border rounded-lg bg-white my-6 p-3  relative">
+              <div className=" border rounded-lg bg-gray-50 my-6 p-3  relative">
                 <span
                   onClick={() => deleteMcqs(i)}
                   className={
                     i > 0
-                      ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                      ? " rounded-[100%] p-1 cursor-pointer absolute right-3 top-1 hover:text-gray-600 hover:scale-110 transition duration-150"
                       : " hidden"
                   }
                 >
-                  Remove
+                  <i className="fa-solid fa-x text-xs text-gray-400 hover:text-gray-600"></i>
                 </span>
                 <div className="  mb-2 flex flex-col gap-2 ">
                   <label
@@ -625,7 +625,7 @@ const Page = () => {
                           />
                         </div>
 
-                        <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
+                        <div className="mb-2 flex flex-col flex-1 gap-2">
                           <label
                             className="text-xs text-slate-600"
                             htmlFor="readingParaThird"
@@ -666,7 +666,7 @@ const Page = () => {
                 </div>
                 <button
                   onClick={(e) => addMoreOpt(e, i)}
-                  className="border border-gray-300 text-sm px-3 py-2 my-1 rounded-md text-gray-500 hover:text-gray-600 transition duration-150"
+                  className="border bg-slate-50 hover:bg-slate-100 border-gray-300 text-sm px-3 py-1.5 my-1 rounded-md text-gray-500 transition duration-150"
                 >
                   Add More
                 </button>
@@ -675,7 +675,7 @@ const Page = () => {
           ))}
           <button
             onClick={(e) => addMorefaq(e)}
-            className="bg-indigo-500 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
+            className="bg-gray-100 hover:bg-gray-200 text-sm px-3 py-2.5 my-1 rounded-md text-gray-500 transition duration-150"
           >
             Add More Question
           </button>
@@ -796,7 +796,7 @@ const Page = () => {
 
           <button
             onClick={(e) => addMoreMatchHeadings(e)}
-            className="bg-indigo-500 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
+            className="bg-gray-100 hover:bg-gray-200 text-sm px-3 py-2.5 my-1 rounded-md text-gray-500 transition duration-150"
           >
             Add More Questions
           </button>
@@ -863,7 +863,7 @@ const Page = () => {
 
           <button
             onClick={(e) => addMoreTrueFalse(e)}
-            className="bg-indigo-500 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
+            className="bg-gray-100 hover:bg-gray-200 text-sm px-3 py-2.5 my-1 rounded-md text-gray-500 transition duration-150"
           >
             Add More True False Questions
           </button>
@@ -898,19 +898,19 @@ const Page = () => {
             </div>
 
             {matchingInformationValues?.length >= 1 && (
-              <div className="border border-gray-200  my-3 p-7">
+              <div className="border border-gray-200 rounded-lg  my-3 p-7">
                 {matchingInformationValues?.map((v, i) => (
                   <div
-                    className="flex items-center gap-2 relative mb-3 bg-indigo-100 rounded-md px-6 p-2"
+                    className="flex w-fit flex-wrap items-center gap-2 relative mb-3 bg-blue-50 rounded-md px-6 p-2"
                     key={i}
                   >
-                    <span className="  rounded-ful  text-indigo-600 absolute left-[-7px] top-[-10px]">
+                    <span className="= text-slate-600">
                       {alphabetsArray[i]}
                     </span>
-                    <p>{v}</p>
+                    <p className=" text-slate-700">{" " + v}</p>
                     <i
                       onClick={() => handleInfoAnsDel(i)}
-                      className="fa-solid fa-x absolute  -right-5  top-[48%] text-[12px] cursor-pointer rounded-[100%] p-[4px] text-red-800 "
+                      className="fa-solid fa-x text-[12px] cursor-pointer rounded-[100%] p-[4px] text-red-800"
                     ></i>
                   </div>
                 ))}
@@ -926,11 +926,11 @@ const Page = () => {
                     onClick={() => deleteMatchInfoQuestions(i)}
                     className={
                       i > 0
-                        ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                        ? " rounded-[100%] p-1 cursor-pointer absolute right-4 top-1 hover:text-gray-600 hover:scale-110 transition duration-150"
                         : " hidden"
                     }
                   >
-                    remove
+                    <i className="fa-solid fa-x text-xs text-gray-400 hover:text-gray-600"></i>
                   </span>
                   <div className="  mb-2 flex flex-col gap-2  ">
                     <label
@@ -958,7 +958,6 @@ const Page = () => {
                         Correct Answer Index
                       </label>
                       <select
-                        className=" border w-full border-gray-500"
                         onChange={(e) => handleChange(e, i)}
                         value={
                           testQuestions.matchingInformation[i]
@@ -968,6 +967,7 @@ const Page = () => {
                         type="number"
                         id="correctChoiceIndex"
                         defaultValue={"DEFAULT"}
+                        className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                       >
                         <option value="DEFAULT" disabled>
                           Select the index.....
@@ -986,7 +986,7 @@ const Page = () => {
 
             <button
               onClick={(e) => addMoreMatchInfoQuestions(e)}
-              className="bg-indigo-500 hover:bg-indigo-600 text-sm px-3 py-2 my-1 rounded-md text-white transition duration-150"
+              className="bg-gray-100 hover:bg-gray-200 text-sm px-3 py-2.5 my-1 rounded-md text-gray-500 transition duration-150"
             >
               Add More Information Questions
             </button>
