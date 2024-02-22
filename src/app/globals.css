@@ -8,6 +8,35 @@
   }
 }
 
+.LoginFormGetInTouch {
+  color: #93c5fd;
+  font-size: 10px;
+  position: relative;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.LoginFormGetInTouch::before {
+  position: absolute;
+  content: "";
+  background-color: #96c7fd;
+  width: 100px;
+  height: 1px;
+  left: 0;
+  top: 50%;
+}
+
+.LoginFormGetInTouch::after {
+  position: absolute;
+  content: "";
+  background-color: #96c7fd;
+  width: 100px;
+  height: 1px;
+  right: 0;
+  top: 50%;
+}
+
+
 /* Aside Animation Button */
 .asideAnimate {
   animation-name: slide;
