@@ -590,7 +590,6 @@ const Page = () => {
             />
           </div>
 
-          {/* left-[40px] */}
 
           <div className="  flex flex-col gap-6 items-end justify-center relative ">
             {optionJSON?.map((v, i) => (
