@@ -3,6 +3,11 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { toast, Toaster } from "react-hot-toast";
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+});
 
 const Page = () => {
   const [isLoading, setIsloading] = useState(false);
@@ -12,7 +17,7 @@ const Page = () => {
     multipleChoice: [
       {
         questionText: "",
-        choices: [{ optionTitle: "", optionValue: "" }],
+        choices: [{ optionTitle: "" }],
         correctChoiceIndex: 0,
       },
     ],
@@ -57,7 +62,7 @@ const Page = () => {
       setTestQuestions({ ...testQuestions, multipleChoice: updatedQuestions });
       return;
     }
-    if (name === "optionTitle" || name === "optionValue") {
+    if (name === "optionTitle") {
       const updatedOptions = testQuestions?.multipleChoice[id]?.choices?.map(
         (v, i) => {
           if (i === index) {
@@ -119,15 +124,12 @@ const Page = () => {
           return v;
         }
       );
-
       setTestQuestions({
         ...testQuestions,
         matchingInformation: updatedInformationHandler,
       });
-
       return;
     }
-
     setTestQuestions({ ...testQuestions, [name]: value });
   };
 
@@ -346,7 +348,7 @@ const Page = () => {
         ...prev.multipleChoice,
         {
           questionText: "",
-          choices: [{ optionTitle: "", optionValue: "" }],
+          choices: [{ optionTitle: "" }],
           correctChoiceIndex: 0,
         },
       ];
@@ -382,13 +384,14 @@ const Page = () => {
         if (mcIndex === id) {
           return {
             ...mc,
-            choices: [...mc.choices, { optionTitle: "", optionValue: "" }],
+            choices: [...mc.choices, { optionTitle: "" }],
           };
         }
         return mc;
       }),
     }));
   };
+
   const addMoreMatchHeadings = (e) => {
     e.preventDefault();
     setTestQuestions((prev) => {
@@ -400,6 +403,12 @@ const Page = () => {
           matchHeadingsChoices: [],
         },
       ];
+
+      const matchMoreAnswer = tags?.map((v, index) => index);
+
+      updatedHeadingQuestion[
+        updatedHeadingQuestion.length - 1
+      ].matchHeadingsChoices = matchMoreAnswer;
 
       return { ...prev, matchingHeading: updatedHeadingQuestion };
     });
@@ -416,6 +425,14 @@ const Page = () => {
           matchingInfoChoices: [],
         },
       ];
+
+      const matchInfoAnswer = matchingInformationValues?.map(
+        (v, index) => index
+      );
+
+      afterAddingMoreInfoQuestions[
+        afterAddingMoreInfoQuestions.length - 1
+      ].matchingInfoChoices = matchInfoAnswer;
 
       return { ...prev, matchingInformation: afterAddingMoreInfoQuestions };
     });
@@ -475,6 +492,29 @@ const Page = () => {
     }
   };
 
+  const optionJSON = [
+    {
+      label: "Multiple choice questions",
+      optKey: 1,
+      icon: "fa-list",
+    },
+    {
+      label: "Match the heading",
+      optKey: 2,
+      icon: "fa-pen",
+    },
+    {
+      label: "True false",
+      optKey: 3,
+      icon: "fa-check",
+    },
+    {
+      label: "Match the information",
+      optKey: 4,
+      icon: "fa-circle-info",
+    },
+  ];
+
   return (
     <>
       <Toaster />
@@ -500,15 +540,14 @@ const Page = () => {
         </div>
 
         {/* -------------------- Para Here -------------------- */}
-        <div className="mb-2 flex flex-col flex-1 gap-2">
-          <label
-            className="text-sm text-slate-600 mt-3"
-            htmlFor="readingParaOne"
-          >
-            Para 01
-          </label>
-
-          <div className="">
+        <div className="mb-2 grid grid-cols-7 gap-2">
+          <div className=" col-span-6">
+            <label
+              className="text-sm text-slate-600 mt-3 mb-3 block"
+              htmlFor="readingParaOne"
+            >
+              Para 01
+            </label>
             <Editor
               apiKey="ruv335lzevajkplnqsirffyzmr5zed52yl2g4rt36rv2phx3"
               value={testQuestions.readingParaOne}
@@ -550,11 +589,29 @@ const Page = () => {
               }}
             />
           </div>
+
+          {/* left-[40px] */}
+
+          <div className="  flex flex-col gap-6 items-end justify-center relative ">
+            {optionJSON?.map((v, i) => (
+              <div
+                key={i}
+                className=" flex items-center border  p-3 shadow-lg group cursor-pointer  bg-white rounded-full  "
+              >
+                <i
+                  className={`fa-solid ${v.icon} text-lg  text-indigo-500`}
+                ></i>
+                <p className=" min-w-[200px] absolute  text-[10px] text-indigo-800  left-[-7px] opacity-0 group-hover:left-[100px]  transition-all duration-200  group-hover:opacity-100">
+                  {v.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ----------------------- MCQ'S ------------------------------------------------------------------------------------------------- */}
         <div
-          className="my-7 p-5 border bg-white  
+          className="my-7 p-5 border-l-2  border-indigo-700 bg-white  shadow-md
          rounded-lg"
         >
           <h3 className=" font-semibold text-slate-700">
@@ -568,7 +625,7 @@ const Page = () => {
                   onClick={() => deleteMcqs(i)}
                   className={
                     i > 0
-                      ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                      ? " rounded-[100%] p-1 cursor-pointer border bg-red-400 text-white absolute right-0 top-[-10px]"
                       : " hidden"
                   }
                 >
@@ -624,26 +681,6 @@ const Page = () => {
                             className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
                           />
                         </div>
-
-                        <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
-                          <label
-                            className="text-xs text-slate-600"
-                            htmlFor="readingParaThird"
-                          >
-                            Option Value
-                          </label>
-                          <input
-                            className=" w-full py-1.5 text-slate-500 focus:text-slate-600 placeholder:text-sm rounded-md px-3 border-gray-300 focus:outline-none focus:ring-2 ring-indigo-500 hover:ring-1 border"
-                            onChange={(e) => handleChange(e, i, j)}
-                            value={
-                              testQuestions?.multipleChoice[i].choices[j]
-                                .optionValue
-                            }
-                            name={"optionValue"}
-                            type="text"
-                            id="optionValue"
-                          />
-                        </div>
                       </div>
 
                       <div className="flex gap-2 items-center py-2">
@@ -682,7 +719,7 @@ const Page = () => {
         </div>
 
         {/* ----------------------- matching headings inputs her---------------------------------------e */}
-        <div className=" my-7 p-5 border bg-white rounded-lg">
+        <div className=" my-7 p-5  bg-white rounded-lg border-l-2  border-indigo-700 shadow-md">
           <h1 className=" font-semibold text-slate-700">
             MATCH THE HEADING QUESTIONS{" "}
           </h1>
@@ -803,7 +840,7 @@ const Page = () => {
         </div>
 
         {/* ----------------------- true False Form ------------------------------------------------------------------------------------*/}
-        <div className="my-7 p-5 border bg-white rounded-lg">
+        <div className="my-7 p-5  bg-white rounded-lg border-l-2  border-indigo-700 shadow-md">
           <h3 className=" font-semibold text-slate-700">TRUE FALSE</h3>
           {testQuestions?.trueFalse?.map((v, i) => (
             <div key={i}>
@@ -870,7 +907,7 @@ const Page = () => {
         </div>
 
         {/* ----------------------- MATCHING THE INFORMATION FORM-------------------------------------------------------------- */}
-        <div className="my-7 p-5 border rounded-lg bg-white">
+        <div className="my-7 p-5  rounded-lg bg-white  border-l-2  border-indigo-700 shadow-md">
           <h1 className=" font-semibold text-slate-700 mb-3">
             MATCH THE INFORMATON QUESTIONS
           </h1>
@@ -926,11 +963,11 @@ const Page = () => {
                     onClick={() => deleteMatchInfoQuestions(i)}
                     className={
                       i > 0
-                        ? " rounded-[100%] p-1 cursor-pointer border border-red-400 bg-red-400 text-white absolute right-0 top-[-10px]"
+                        ? " rounded-[100%] p-1 cursor-pointer  text-white absolute right-2  top-1"
                         : " hidden"
                     }
                   >
-                    remove
+                    <i class="fa-solid fa-x text-sm text-gray-400"></i>
                   </span>
                   <div className="  mb-2 flex flex-col gap-2  ">
                     <label

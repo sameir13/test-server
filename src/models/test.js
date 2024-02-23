@@ -14,7 +14,7 @@ const testSchema = new mongoose.Schema(
     readingParaOne: {
       type: String,
     },
-    
+
     /*mcqs based test question*/
     multipleChoice: [
       {
@@ -25,7 +25,6 @@ const testSchema = new mongoose.Schema(
         choices: [
           {
             optionTitle: { type: String },
-            optionValue: { type: String },
           },
         ],
         correctChoiceIndex: {
