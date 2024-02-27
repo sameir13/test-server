@@ -472,7 +472,7 @@ const Page = () => {
     e.preventDefault();
     try {
       setIsloading(true);
-      const sendDataToDb = await axios.post("http://localhost:3000/api/test", {
+      const sendDataToDb = await axios.post("http://localhost:3000/api/reading", {
         ...testQuestions,
         headingAnswer: tags,
         infoAnswers: matchingInformationValues,
@@ -648,8 +648,7 @@ const Page = () => {
           {/* ----------------------- MCQ'S ------------------------------------------------------------------------------------------------- */}
           {renderState?.includes(1) && (
             <div
-              className="my-7 p-5 border-l-2  border-indigo-700 bg-white  shadow-md
-         rounded-lg"
+              className="my-7 p-5 border-l-2  border-indigo-700 bg-white  shadow-md rounded-lg"
             >
               <h3 className=" font-semibold text-slate-700">
                 MULTIPLE CHOICE QUESTIONS

@@ -3,7 +3,8 @@ import axios from "axios";
 import Link from "next/link";
 import { Merienda } from "next/font/google";
 import { useRouter } from "next/navigation";
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
+import { SessionData } from "@/app/context";
 
 const Meriend = Merienda({
   weight: "800",
@@ -12,19 +13,21 @@ const Meriend = Merienda({
 
 const Dnav = () => {
   const router = useRouter();
+  const user = useContext(SessionData);
 
-  //   const handleLogout = async () => {
-  //     try {
-  //       const confirmLogout = window.confirm("Are you sure you want to logout?");
-  //       if (!confirmLogout) return;
-  //       const res = await axios.post("/api/users/logout");
-  //       if (res.data.success) {
-  //         router.push("/login");
-  //       }
-  //     } catch (error) {
-  //       console.error("Logout failed", error);
-  //     }
-  //   };
+  const handleLogout = async () => {
+    try {
+      const confirmLogout = window.confirm("Are you sure you want to logout?");
+      if (!confirmLogout) return;
+      const res = await axios.post("/api/auth/logout");
+      if (res?.data?.success) {
+        toast.success("Signed Out");
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   return (
     <>
@@ -50,9 +53,11 @@ const Dnav = () => {
                 className="rounded-full h-9 w-9 object-cover cursor-pointer border border-gray-300"
               />
               <div className="leading-3">
-                <p className="text-[14px] capitalize font-medium">Not Found</p>
+                <p className="text-[14px] text-black mb-1 capitalize font-medium">
+                  {user?.user?.fullName}
+                </p>
                 <span className="text-[11px] cursor-pointer text-red-500 hover:text-red-600">
-                  User
+                  {user?.user?.isAdmin ? "Admin" : "User"}
                 </span>
               </div>
 
@@ -74,7 +79,10 @@ const Dnav = () => {
                     >
                       <i className="fa-solid fa-gear"></i> Setting
                     </Link>
-                    <button className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-2">
+                    <button
+                      onClick={handleLogout}
+                      className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-2"
+                    >
                       <i className="fa-solid fa-gear"></i> Logout
                     </button>
                   </li>

@@ -8,7 +8,7 @@ export async function middleware(req, res) {
 
   var pathname = req.nextUrl.pathname;
 
-  var publicRoutes = ["/dasboard"];
+  var publicRoutes = ["/"];
 
   if (!AccessToken && !publicRoutes.includes(pathname)) {
     if (pathname.startsWith("/api/")) {
@@ -17,17 +17,19 @@ export async function middleware(req, res) {
         message: "Your are not Authorized!",
       });
     }
+
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // if (AccessToken && pathname === "/") {
-  //   return NextResponse.redirect(new URL("/dashboard", req.url));
-  // }
+  if (AccessToken && pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
 }
 
 export const config = {
   matcher: [
-    "/dasboard",
+    "/",
+    "/dashboard",
     "/dashboard/:path*",
     "/api/auth/profile",
     "/api/auth/register",

@@ -22,10 +22,10 @@ export default async function handler(req, res) {
         break;
 
       case "GET":
-        const getTests = await test.find();
+        const findTest = await test.find();
         res.status(200).json({
           success: true,
-          message: getTests,
+          message: findTest,
         });
 
         break;

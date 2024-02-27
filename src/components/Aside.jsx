@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 // ASIDE LINKS ADDED
 var adminNavLinks = [
   { href: "/dashboard", lable: "Dashboard", icon: "fa-solid fa-chart-simple" },
-  { href: "/dashboard/create", lable: "Create", icon: "fa-solid fa-list" },
+  { href: "/dashboard/builder/", lable: "Reading", icon: "fa-solid fa-pen" },
   {
     href: "/dashboard/user",
     lable: "Users",

@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const testSchema = new mongoose.Schema(
   {
+    author:{
+      type:mongoose.Schema.Types.ObjectId
+    },
     title: {
       type: String,
       required: [true, "Title is required"],
