@@ -263,9 +263,6 @@ const Page = ({ params }) => {
 
   // Handle Answer Delete -----------------/
   const handleDel = (i) => {
-    // const updatedTags = [...copyMatchHeading];
-    // updatedTags.splice(i, 1);
-    // setCopyMatchHeading(updatedTags);
     const updatedTags = copyMatchHeading.filter((items, index) => index != i);
     setCopyMatchHeading(updatedTags);
     setTestQuestions((prev) => {
@@ -873,7 +870,7 @@ const Page = ({ params }) => {
                       />
                     </div>
 
-                    {tags.length > 0 && (
+                    {copyMatchHeading.length > 0 && (
                       <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
                         <label
                           className="text-xs text-slate-600 mt-3"
@@ -1120,24 +1117,6 @@ const Page = ({ params }) => {
           </div>
         </div>
         <div>
-          {/* <div className=" sticky top-5">
-            <div className="flex flex-col gap-6 items-end justify-center  relative">
-              {optionJSON?.map((v, i) => (
-                <div
-                  key={i}
-                  className=" flex items-center border  p-3 shadow-lg group cursor-pointer   bg-white rounded-full  "
-                  onClick={() => handleStateRender(v.optKey)}
-                >
-                  <i
-                    className={`fa-solid ${v.icon} text-lg  text-indigo-500`}
-                  ></i>
-                  <p className=" min-w-[200px] absolute  text-[10px] text-indigo-800   left-[-7px] opacity-0 group-hover:left-[40px]  transition-all duration-200  group-hover:opacity-100     ">
-                    {v.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div> */}
         </div>
       </form>
     </>

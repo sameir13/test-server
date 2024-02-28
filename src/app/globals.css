@@ -61,3 +61,14 @@
 .globalShadow{
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
 }
+
+
+
+.formInps{
+  border: none !important;
+  border-bottom: 1px solid rgb(153, 153, 153) !important;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: gray;
+  /* width: 100% !important; */
+}
