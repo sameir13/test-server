@@ -20,6 +20,7 @@ const tableHeader = [
 const Page = () => {
   const router = useRouter();
   const [Loading, setLoading] = useState(false);
+  const [ShowForm, setShowForm] = useState(false);
   const [FilterByName, setFilterByName] = useState({ title: "", page: 1 });
 
   //-----------------------------------------------------------------
@@ -48,17 +49,23 @@ const Page = () => {
   };
 
   // delete Product by Slug ------------------------------------------------------/
-  const delPost = async (slug) => {
+
+  const [ SlugID, setSlugID ] = useState("");
+  const handleSendSlugAndPopUp = (slug) => {
+    setSlugID(slug);
+    setShowForm(true);
+  };
+
+  const delPost = async () => {
     try {
-      if (window.confirm("Are you sure you want to delete") === true) {
-        const del = await fetch(`/api/reading/${slug}`, {
+        const del = await fetch(`/api/reading/${SlugID}`, {
           method: "DELETE",
         });
         if (del?.ok) {
           toast.success("Deleted!!!");
           window.location.reload();
         }
-      }
+    
     } catch (error) {
       console.log(error);
     }
@@ -180,7 +187,7 @@ const Page = () => {
                       </Link>
                       <i
                         title="Delete"
-                        onClick={() => delPost(v.slug)}
+                        onClick={() => handleSendSlugAndPopUp(v.slug)}
                         className="fa fa-solid fa-trash px-2 py-1 cursor-pointer hover:bg-gray-100 rounded-full text-red-400 text-sm"
                       ></i>
                     </td>
@@ -230,6 +237,45 @@ const Page = () => {
               </button>
             </div>
           </div> */}
+        </div>
+      </div>
+      {/* DELETE POPUP MODEL-------------------------------------------------------------------- */}
+
+      <div
+        style={{
+          visibility: ShowForm ? "visible" : "hidden",
+          opacity: ShowForm ? "1" : "0",
+          transition: ".4s",
+        }}
+        className="fixed z-10 top-0 left-0 w-full flex items-center justify-center h-screen border-red-600 backdrop-blur-[2px] bg-[#00000094] overflow-auto"
+      >
+        <div className=" relative w-full max-w-[400px] bg-[#0a061b]  rounded-lg py-10 px-4 shadow-2xl">
+          <div className=" absolute right-3 top-3 flex items-end justify-end border-b-1 border-b-slate-500">
+            <i
+              onClick={() => setShowForm(false)}
+              className="bx bx-x text-white text-xl cursor-pointer"
+            ></i>
+          </div>
+          <div className=" flex flex-col items-center justify-center ">
+            <p className=" text-md text-white mb-3">
+              Are you sure you want delete?
+            </p>
+            <div className=" mt-3">
+              <button
+                onClick={() => setShowForm(false)}
+                className=" border border-slate-500 text-slate-500 py-1 px-6 text-sm "
+              >
+                Cancel
+              </button>
+              <button
+                onClick={delPost}
+                className=" bg-indigo-400  border ml-4 border-indigo-400  text-white py-1 px-6 text-sm "
+              >
+                {" "}
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>
