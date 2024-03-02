@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { Merienda } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { SessionData } from "@/app/context";
+import { Toaster, toast } from "react-hot-toast";
 
 const Meriend = Merienda({
   weight: "800",
@@ -30,6 +31,7 @@ const Dnav = () => {
 
   return (
     <>
+    <Toaster/>
       <div className="relative">
         <div className="flex items-center justify-between px-4 py-0">
           <div className="flex items-center gap-4">
