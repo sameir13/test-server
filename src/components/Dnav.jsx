@@ -10,7 +10,7 @@ import { SessionData } from "@/app/context";
 const Meriend = Merienda({
   weight: "800",
   subsets: ["latin"],
-})
+});
 const Dnav = () => {
   const router = useRouter();
   const { user } = useContext(SessionData);
@@ -33,13 +33,12 @@ const Dnav = () => {
       <div className="relative">
         <div className="flex items-center justify-between px-4 py-0">
           <div className="flex items-center gap-4">
-            <i
-              onClick={() => alert("Roko Zara Sabar Karo!")}
-              className="fa-solid fa-bars-staggered text-gray-500 text-lg"
-            ></i>
-            <div className="flex items-center">
+            <div className="flex items-center  ">
               <Link href={"/"} id="logo" className={Meriend.className}>
-                Readable
+                <div className=" flex items-center gap-3">
+                  <i class="bx bx-book-open text-3xl text-indigo-500"></i>
+                  <p className=" text-indigo-500">ASSESMENT PORTAL</p>
+                </div>
               </Link>
             </div>
           </div>

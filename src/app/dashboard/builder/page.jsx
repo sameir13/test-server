@@ -50,7 +50,7 @@ const Page = () => {
 
   // delete Product by Slug ------------------------------------------------------/
 
-  const [ SlugID, setSlugID ] = useState("");
+  const [SlugID, setSlugID] = useState("");
   const handleSendSlugAndPopUp = (slug) => {
     setSlugID(slug);
     setShowForm(true);
@@ -58,35 +58,17 @@ const Page = () => {
 
   const delPost = async () => {
     try {
-        const del = await fetch(`/api/reading/${SlugID}`, {
-          method: "DELETE",
-        });
-        if (del?.ok) {
-          toast.success("Deleted!!!");
-          window.location.reload();
-        }
-    
+      const del = await fetch(`/api/reading/${SlugID}`, {
+        method: "DELETE",
+      });
+      if (del?.ok) {
+        toast.success("Deleted!!!");
+        window.location.reload();
+      }
     } catch (error) {
       console.log(error);
     }
   };
-
-  // // Fetch Data Basis Filter by Name Function ------------------------------------/
-  // const fetchData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     await refetch();
-  //   } catch (error) {
-  //     toast.error(error?.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // Filter Data On Filteration --------------------------------------------------/
-  // useEffect(() => {
-  //   fetchData();
-  // }, [FilterByName]);
 
   return (
     <>
