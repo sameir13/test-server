@@ -1,15 +1,14 @@
 "use client"
-import { createContext, useState, useEffect } from "react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import axios from "axios";
+import { createContext, useState, useEffect } from "react";
 
 export const SessionData = createContext();
 
 const Context = ({ children }) => {
   const [user, setUser] = useState(null);
-  const router = useRouter();
-  const  {pathname} = usePathname()
+  const  pathname = usePathname()
   var fetchUser = async () => {
     try {
       var user = await axios.post("/api/auth/profile");

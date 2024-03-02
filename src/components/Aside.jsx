@@ -8,11 +8,18 @@ var adminNavLinks = [
   { href: "/dashboard", lable: "Dashboard", icon: "fa-solid fa-chart-simple" },
   { href: "/dashboard/builder/", lable: "Reading", icon: "fa-solid fa-pen" },
   {
+    href: "/dashboard/tips-&-tricks",
+    lable: "Tips & Tricks",
+    icon: "bx bxs-magic-wand",
+  },
+  {
     href: "/dashboard/user",
     lable: "Users",
     icon: "fa-solid fa-headphones-simple",
   },
+ 
 ];
+
 
 const Aside = () => {
   const pathname = usePathname();

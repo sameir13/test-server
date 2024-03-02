@@ -1,20 +1,19 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image";
+import { useContext } from "react";
 import { Merienda } from "next/font/google";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
 import { SessionData } from "@/app/context";
 
 const Meriend = Merienda({
   weight: "800",
   subsets: ["latin"],
-});
-
+})
 const Dnav = () => {
   const router = useRouter();
-  const user = useContext(SessionData);
-
+  const { user } = useContext(SessionData);
   const handleLogout = async () => {
     try {
       const confirmLogout = window.confirm("Are you sure you want to logout?");
@@ -47,17 +46,19 @@ const Dnav = () => {
           {/* PROFILE START ============================*/}
           <>
             <div className="flex py-2 group relative items-center gap-2 pr-4">
-              <img
-                src="/user.jpeg"
+              <Image
+                src={user?.avatar}
                 alt="image here"
+                height={50}
+                width={50}
                 className="rounded-full h-9 w-9 object-cover cursor-pointer border border-gray-300"
-              />
+              ></Image>
               <div className="leading-3">
                 <p className="text-[14px] text-black mb-1 capitalize font-medium">
-                  {user?.user?.fullName}
+                  {user?.fullName}
                 </p>
                 <span className="text-[11px] cursor-pointer text-red-500 hover:text-red-600">
-                  {user?.user?.isAdmin ? "Admin" : "User"}
+                  {user?.isAdmin ? "Admin" : "User"}
                 </span>
               </div>
 
@@ -72,12 +73,6 @@ const Dnav = () => {
                       href="/dashboard/profile"
                     >
                       <i className="fa-solid fa-user"></i> Profile
-                    </Link>
-                    <Link
-                      className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-2"
-                      href="/"
-                    >
-                      <i className="fa-solid fa-gear"></i> Setting
                     </Link>
                     <button
                       onClick={handleLogout}

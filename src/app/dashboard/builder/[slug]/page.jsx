@@ -1,15 +1,17 @@
 "use client";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { Inter } from "next/font/google";
 import { useState, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { toast, Toaster } from "react-hot-toast";
-import { Inter } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
 });
 
 const Page = ({ params }) => {
+  const router = useRouter()
   const [isLoading, setIsloading] = useState(false);
   const [testQuestions, setTestQuestions] = useState({
     title: "",
@@ -61,7 +63,7 @@ const Page = ({ params }) => {
       setCopyMatchInfo(res.data.message?.infoAnswers);
     };
     fetchReading();
-  }, []);
+  },[params.slug]);
 
   const handleChange = (e, id, index) => {
     const { name, value, type, checked } = e.target;
@@ -221,17 +223,19 @@ const Page = ({ params }) => {
     });
   };
 
+
   // Matching heading answer options adding----------------------------
   const [data, setdata] = useState();
   const [tags, setTags] = useState([]);
-  const addTag = (e) => {
+  const addTag = (e) => { 
     e.preventDefault();
     if (!data) {
       return;
     }
     var copy = copyMatchHeading;
+
     copy.push(data);
-    setTags(copy);
+    setCopyMatchHeading(copy)
     setdata("");
     setTestQuestions((prev) => {
       const updatedMatchingHeading = prev.matchingHeading.map((mh) => {
@@ -298,7 +302,7 @@ const Page = ({ params }) => {
     }
     var copy = copyMatchInfo;
     copy.push(infoData);
-    setMatchingInformationValues(copy);
+    setCopyMatchInfo(copy)
     setInfoData("");
 
     setTestQuestions((prev) => {
@@ -444,7 +448,7 @@ const Page = ({ params }) => {
         },
       ];
 
-      const matchMoreAnswer = tags?.map((v, index) => index);
+      const matchMoreAnswer = copyMatchHeading?.map((v, index) => index);
 
       updatedHeadingQuestion[
         updatedHeadingQuestion.length - 1
@@ -466,7 +470,7 @@ const Page = ({ params }) => {
         },
       ];
 
-      const matchInfoAnswer = matchingInformationValues?.map(
+      const matchInfoAnswer = copyMatchInfo?.map(
         (v, index) => index
       );
 
@@ -508,21 +512,22 @@ const Page = ({ params }) => {
     "z",
   ];
 
-  const handleSubmit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       setIsloading(true);
-      const sendDataToDb = await axios.post(
-        "http://localhost:3000/api/reading",
+      const sendDataToDb = await axios.put(
+        `/api/reading/${params.slug}`,
         {
           ...testQuestions,
-          headingAnswer: tags,
-          infoAnswers: matchingInformationValues,
+          headingAnswer: copyMatchHeading,
+          infoAnswers: copyMatchInfo,
         }
       );
 
       if (sendDataToDb?.data?.success) {
-        toast.success("Test Upload Successfully");
+        toast.success("Updated Successfully");
+        router.push("/dashboard/builder")
       }
       setTestQuestions({
         title: "",
@@ -560,8 +565,8 @@ const Page = ({ params }) => {
           },
         ],
       });
-      setTags([]);
-      setMatchingInformationValues([]);
+      setCopyMatchHeading([]);
+      setCopyMatchInfo([]);
     } catch (error) {
       console.log(error);
       if (error?.response?.data?.message) {
@@ -572,45 +577,12 @@ const Page = ({ params }) => {
     }
   };
 
-  // const [renderState, setRenderState] = useState([]);
-  // const handleStateRender = (key) => {
-  //   if (renderState?.includes(key)) {
-  //     return;
-  //   }
-  //   var copyKey = key;
-  //   var copyArray = [];
-  //   copyArray.push(copyKey);
-  //   var combinedKeys = [...renderState, ...copyArray];
-  //   setRenderState(combinedKeys);
-  // };
-  // const optionJSON = [
-  //   {
-  //     label: "Multiple choice questions",
-  //     optKey: 1,
-  //     icon: "fa-list",
-  //   },
-  //   {
-  //     label: "Match the heading",
-  //     optKey: 2,
-  //     icon: "fa-pen",
-  //   },
-  //   {
-  //     label: "True false",
-  //     optKey: 3,
-  //     icon: "fa-check",
-  //   },
-  //   {
-  //     label: "Match the information",
-  //     optKey: 4,
-  //     icon: "fa-circle-info",
-  //   },
-  // ];
 
   return (
     <>
       <Toaster />
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleUpdate}
         className=" max-w-[700px] p-4 m-auto grid grid-cols-10 gap-9 "
       >
         <div className=" col-span-9">
@@ -891,7 +863,7 @@ const Page = ({ params }) => {
                           defaultValue={"DEFAULT"}
                         >
                           <option value="DEFAULT" disabled></option>
-                          {tags?.map((v, tIndex) => (
+                          {copyMatchHeading?.map((v, tIndex) => (
                             <option key={tIndex} value={tIndex}>
                               {alphabetsArray[tIndex]}
                             </option>
@@ -1065,7 +1037,7 @@ const Page = ({ params }) => {
                       />
                     </div>
 
-                    {matchingInformationValues.length > 0 && (
+                    {copyMatchInfo.length > 0 && (
                       <div className="border-3 border-black mb-2 flex flex-col flex-1 gap-2">
                         <label htmlFor="readingParaThird">
                           Correct Answer Index
@@ -1085,7 +1057,7 @@ const Page = ({ params }) => {
                           <option value="DEFAULT" disabled>
                             Select the index.....
                           </option>
-                          {matchingInformationValues?.map((v, mIndex) => (
+                          {copyMatchInfo?.map((v, mIndex) => (
                             <option key={mIndex} value={mIndex}>
                               {alphabetsArray[mIndex]}
                             </option>

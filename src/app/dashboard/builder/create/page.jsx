@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { toast, Toaster } from "react-hot-toast";
 import { Inter } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 const inter = Inter({
   subsets: ["latin"],
 });
 
 const Page = () => {
+  const router = useRouter()
   const [isLoading, setIsloading] = useState(false);
   const [testQuestions, setTestQuestions] = useState({
     title: "",
@@ -477,10 +479,9 @@ const Page = () => {
         headingAnswer: tags,
         infoAnswers: matchingInformationValues,
       });
-
-      // console.log(sendDataToDb?.data?.success)
       if (sendDataToDb?.data?.success) {
         toast.success("Test Upload Successfully");
+        router.push("/dashboard/builder")
       }
       setTestQuestions(
         {

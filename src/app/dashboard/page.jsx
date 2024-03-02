@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import axios from "axios";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
 
@@ -41,8 +39,8 @@ const Page = () => {
       <div className="max-w-[1300px] m-auto ">
         <div className=" flex  gap-3 flex-wrap   max-md:justify-center ">
           {indexJson?.map((v, i) => (
-            <div key={i}  className={` cursor-pointer flex-1 ${v.bgColor}`}>
-              <div className="rounded-lg py-5 px-7 flex   shadow-lg transition-all  duration-300 ">
+            <div key={i}  className={` cursor-pointer  shadow-lg flex-1 ${v.bgColor}`}>
+              <div className="rounded-lg py-5 px-7 flex   transition-all  duration-300 ">
                 <div className=" flex-1">
                   <h2 className=" text-slate-600 text-base mb-2">
                     {v.tagName}
