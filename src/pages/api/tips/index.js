@@ -22,8 +22,9 @@ export default async function handler(req, res) {
         .find(match, { Metadesc: 0, metaTitle: 0 })
         .limit(limit)
         .skip(skip)
-        .sort({ createdAt: -1 });
-      tricks.count = await tips.find(match).sort({ createdAt: -1 }).count();
+        .sort({ createdAt: -1 })
+        .populate("author", "fullName email")
+      tricks.count = await tips.find(match).sort({ createdAt: -1 }).count()
     }
 
     tricks.starting = skip + 1;

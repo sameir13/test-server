@@ -26,22 +26,20 @@ const Page = () => {
   //-----------------------------------------------------------------
 
   // Fetch BLog Here --------------------------------------------------/
-  const {
-    data: productData,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery(["products", FilterByName], async () => {
+
+  const [productData, setProductData] = useState([]);
+  const fetchData = async () => {
     try {
       const queryString = queryStr.stringify(FilterByName);
-      console.log(queryString);
       const res = await axios.get(`/api/reading?${queryString}`);
-
-      return res.data.message;
+      setProductData(res?.data?.message);
     } catch (error) {
-      throw new Error(error.message);
+      console.log(error);
     }
-  });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   // Input Hadler For Searching by Name ------------------------------------------/
   const searchInputHanler = (e) => {
@@ -69,6 +67,10 @@ const Page = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [delPost]);
 
   return (
     <>

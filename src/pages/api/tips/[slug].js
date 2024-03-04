@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   try {
     switch (req.method) {
       case "GET":
-        const findSingle = await tips.findById(findTrick._id);
+        const findSingle = await tips.findById(findTrick._id).populate("author", "fullName email")
         res.status(200).json({
           success: true,
           message: findSingle,

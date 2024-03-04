@@ -2,7 +2,7 @@
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Merienda } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { SessionData } from "@/app/context";
@@ -12,17 +12,18 @@ const Meriend = Merienda({
   weight: "800",
   subsets: ["latin"],
 });
+
 const Dnav = () => {
   const router = useRouter();
+  const [ShowForm, setShowForm] = useState(false);
   const { user } = useContext(SessionData);
   const handleLogout = async () => {
     try {
-      const confirmLogout = window.confirm("Are you sure you want to logout?");
-      if (!confirmLogout) return;
       const res = await axios.post("/api/auth/logout");
       if (res?.data?.success) {
         toast.success("Signed Out");
         router.push("/");
+        setShowForm(false)
       }
     } catch (error) {
       console.error("Logout failed", error);
@@ -31,14 +32,14 @@ const Dnav = () => {
 
   return (
     <>
-    <Toaster/>
+      <Toaster />
       <div className="relative">
         <div className="flex items-center justify-between px-4 py-0">
           <div className="flex items-center gap-4">
             <div className="flex items-center  ">
               <Link href={"/"} id="logo" className={Meriend.className}>
                 <div className=" flex items-center gap-3">
-                  <i class="bx bx-book-open text-3xl text-indigo-500"></i>
+                  <i className="bx bx-book-open text-3xl text-indigo-500"></i>
                   <p className=" text-indigo-500">ASSESMENT PORTAL</p>
                 </div>
               </Link>
@@ -48,7 +49,7 @@ const Dnav = () => {
           <>
             <div className="flex py-2 group relative items-center gap-2 pr-4">
               <Image
-                src={user?.avatar}
+                src={ user?.avatar ? user?.avatar : ""}
                 alt="image here"
                 height={50}
                 width={50}
@@ -76,7 +77,7 @@ const Dnav = () => {
                       <i className="fa-solid fa-user"></i> Profile
                     </Link>
                     <button
-                      onClick={handleLogout}
+                      onClick={() => setShowForm(true)}
                       className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-2"
                     >
                       <i className="fa-solid fa-gear"></i> Logout
@@ -86,6 +87,46 @@ const Dnav = () => {
               </div>
             </div>
           </>
+        </div>
+      </div>
+
+      {/* DELETE POPUP MODEL-------------------------------------------------------------------- */}
+
+      <div
+        style={{
+          visibility: ShowForm ? "visible" : "hidden",
+          opacity: ShowForm ? "1" : "0",
+          transition: ".4s",
+        }}
+        className="fixed z-10 top-0 left-0 w-full flex items-center justify-center h-screen border-red-600 backdrop-blur-[2px] bg-[#00000094] overflow-auto"
+      >
+        <div className=" relative w-full max-w-[400px] bg-[#0a061b]  rounded-lg py-10 px-4 shadow-2xl">
+          <div className=" absolute right-3 top-3 flex items-end justify-end border-b-1 border-b-slate-500">
+            <i
+              onClick={() => setShowForm(false)}
+              className="bx bx-x text-white text-xl cursor-pointer"
+            ></i>
+          </div>
+          <div className=" flex flex-col items-center justify-center ">
+            <p className=" text-md text-white mb-3">
+              Are you sure you want delete?
+            </p>
+            <div className=" mt-3">
+              <button
+                onClick={() => setShowForm(false)}
+                className=" border border-slate-500 text-slate-500 py-1 px-6 text-sm "
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLogout}
+                className=" bg-indigo-400  border ml-4 border-indigo-400  text-white py-1 px-6 text-sm "
+              >
+                {" "}
+                Sign Out
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>
