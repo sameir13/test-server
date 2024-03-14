@@ -55,9 +55,7 @@ const Page = ({ params }) => {
   const [copyMatchInfo, setCopyMatchInfo] = useState([]);
   useEffect(() => {
     const fetchReading = async () => {
-      const res = await axios.get(
-        `/api/reading/${params.slug}`
-      );
+      const res = await axios.get(`/api/reading/${params.slug}`);
       setTestQuestions(res?.data?.message);
       setCopyMatchHeading(res?.data?.message?.headingAnswer);
       setCopyMatchInfo(res.data.message?.infoAnswers);
@@ -407,9 +405,9 @@ const Page = ({ params }) => {
         {
           trueFalseQuestion: "",
           trueFalseChoices: [
-            { answerValue: 0 },
-            { answerValue: 1 },
-            { answerValue: 2 },
+            { answerValue: 0, statement: "TRUE" },
+            { answerValue: 1, statement: "FALSE" },
+            { answerValue: 2, statement: "NOT GIVEN" },
           ],
           trueFalseCorrectIndex: 0,
         },

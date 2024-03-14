@@ -366,9 +366,9 @@ const Page = () => {
         {
           trueFalseQuestion: "",
           trueFalseChoices: [
-            { answerValue: 0, statement: "" },
-            { answerValue: 1, statement: "" },
-            { answerValue: 2, statement: "" },
+            { answerValue: 0, statement: "TRUE" },
+            { answerValue: 1, statement: "FALSE" },
+            { answerValue: 2, statement: "NOT GIVEN" },
           ],
           trueFalseCorrectIndex: 0,
         },
@@ -475,7 +475,7 @@ const Page = () => {
     try {
       setIsloading(true);
       const sendDataToDb = await axios.post(
-        "http://localhost:300/api/reading",
+        "/api/reading",
         {
           ...testQuestions,
           headingAnswer: tags,
