@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 const Page = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [isLoading, setIsloading] = useState(false);
   const [testQuestions, setTestQuestions] = useState({
     title: "",
@@ -27,9 +27,9 @@ const Page = () => {
       {
         trueFalseQuestion: "",
         trueFalseChoices: [
-          { answerValue: 0 },
-          { answerValue: 1 },
-          { answerValue: 2 },
+          { answerValue: 0, statement: "TRUE" },
+          { answerValue: 1, statement: "FALSE" },
+          { answerValue: 2, statement: "NOT GIVEN" },
         ],
         trueFalseCorrectIndex: 0,
       },
@@ -366,9 +366,9 @@ const Page = () => {
         {
           trueFalseQuestion: "",
           trueFalseChoices: [
-            { answerValue: 0 },
-            { answerValue: 1 },
-            { answerValue: 2 },
+            { answerValue: 0, statement: "" },
+            { answerValue: 1, statement: "" },
+            { answerValue: 2, statement: "" },
           ],
           trueFalseCorrectIndex: 0,
         },
@@ -474,54 +474,56 @@ const Page = () => {
     e.preventDefault();
     try {
       setIsloading(true);
-      const sendDataToDb = await axios.post("http://localhost:3000/api/reading", {
-        ...testQuestions,
-        headingAnswer: tags,
-        infoAnswers: matchingInformationValues,
-      });
+      const sendDataToDb = await axios.post(
+        "http://localhost:3000/api/reading",
+        {
+          ...testQuestions,
+          headingAnswer: tags,
+          infoAnswers: matchingInformationValues,
+        }
+      );
       if (sendDataToDb?.data?.success) {
         toast.success("Test Upload Successfully");
-        router.push("/dashboard/builder")
+        router.push("/dashboard/builder");
       }
-      setTestQuestions(
-        {
-          title: "",
-          readingParaOne: "",
-          multipleChoice: [
-            {
-              questionText: "",
-              choices: [{ optionTitle: "" }],
-              correctChoiceIndex: 0,
-            },
-          ],
-          trueFalse: [
-            {
-              trueFalseQuestion: "",
-              trueFalseChoices: [
-                { answerValue: 0 },
-                { answerValue: 1 },
-                { answerValue: 2 },
-              ],
-              trueFalseCorrectIndex: 0,
-            },
-          ],
-          matchingHeading: [
-            {
-              matchingHeadingQuesTitle: "",
-              matchingHeadingAnswerIndex: 0,
-              matchHeadingsChoices: [],
-            },
-          ],
-          matchingInformation: [
-            {
-              matchingInfoQuesTitle: "",
-              matchingInfoAnswersIndex: 0,
-              matchingInfoChoices: [],
-            },
-          ],
-        })
-      setTags([])
-      setMatchingInformationValues([])
+      setTestQuestions({
+        title: "",
+        readingParaOne: "",
+        multipleChoice: [
+          {
+            questionText: "",
+            choices: [{ optionTitle: "" }],
+            correctChoiceIndex: 0,
+          },
+        ],
+        trueFalse: [
+          {
+            trueFalseQuestion: "",
+            trueFalseChoices: [
+              { answerValue: 0, statement: "" },
+              { answerValue: 1, statement: "" },
+              { answerValue: 2, statement: "" },
+            ],
+            trueFalseCorrectIndex: 0,
+          },
+        ],
+        matchingHeading: [
+          {
+            matchingHeadingQuesTitle: "",
+            matchingHeadingAnswerIndex: 0,
+            matchHeadingsChoices: [],
+          },
+        ],
+        matchingInformation: [
+          {
+            matchingInfoQuesTitle: "",
+            matchingInfoAnswersIndex: 0,
+            matchingInfoChoices: [],
+          },
+        ],
+      });
+      setTags([]);
+      setMatchingInformationValues([]);
     } catch (error) {
       console.log(error);
       if (error?.response?.data?.message) {
@@ -530,7 +532,7 @@ const Page = () => {
     } finally {
       setIsloading(false);
     }
-  };  
+  };
 
   const optionJSON = [
     {
@@ -648,9 +650,7 @@ const Page = () => {
 
           {/* ----------------------- MCQ'S ------------------------------------------------------------------------------------------------- */}
           {renderState?.includes(1) && (
-            <div
-              className="my-7 p-5 border-l-2  border-indigo-700 bg-white  shadow-md rounded-lg"
-            >
+            <div className="my-7 p-5 border-l-2  border-indigo-700 bg-white  shadow-md rounded-lg">
               <h3 className=" font-semibold text-slate-700">
                 MULTIPLE CHOICE QUESTIONS
               </h3>

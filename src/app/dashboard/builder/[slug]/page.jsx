@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 const Page = ({ params }) => {
-  const router = useRouter()
+  const router = useRouter();
   const [isLoading, setIsloading] = useState(false);
   const [testQuestions, setTestQuestions] = useState({
     title: "",
@@ -27,9 +27,9 @@ const Page = ({ params }) => {
       {
         trueFalseQuestion: "",
         trueFalseChoices: [
-          { answerValue: 0 },
-          { answerValue: 1 },
-          { answerValue: 2 },
+          { answerValue: 0, statement: "TRUE" },
+          { answerValue: 1, statement: "FALSE" },
+          { answerValue: 2, statement: "NOT GIVEN" },
         ],
         trueFalseCorrectIndex: 0,
       },
@@ -63,7 +63,7 @@ const Page = ({ params }) => {
       setCopyMatchInfo(res.data.message?.infoAnswers);
     };
     fetchReading();
-  },[params.slug]);
+  }, [params.slug]);
 
   const handleChange = (e, id, index) => {
     const { name, value, type, checked } = e.target;
@@ -223,11 +223,10 @@ const Page = ({ params }) => {
     });
   };
 
-
   // Matching heading answer options adding----------------------------
   const [data, setdata] = useState();
   const [tags, setTags] = useState([]);
-  const addTag = (e) => { 
+  const addTag = (e) => {
     e.preventDefault();
     if (!data) {
       return;
@@ -235,7 +234,7 @@ const Page = ({ params }) => {
     var copy = copyMatchHeading;
 
     copy.push(data);
-    setCopyMatchHeading(copy)
+    setCopyMatchHeading(copy);
     setdata("");
     setTestQuestions((prev) => {
       const updatedMatchingHeading = prev.matchingHeading.map((mh) => {
@@ -302,7 +301,7 @@ const Page = ({ params }) => {
     }
     var copy = copyMatchInfo;
     copy.push(infoData);
-    setCopyMatchInfo(copy)
+    setCopyMatchInfo(copy);
     setInfoData("");
 
     setTestQuestions((prev) => {
@@ -470,9 +469,7 @@ const Page = ({ params }) => {
         },
       ];
 
-      const matchInfoAnswer = copyMatchInfo?.map(
-        (v, index) => index
-      );
+      const matchInfoAnswer = copyMatchInfo?.map((v, index) => index);
 
       afterAddingMoreInfoQuestions[
         afterAddingMoreInfoQuestions.length - 1
@@ -516,18 +513,15 @@ const Page = ({ params }) => {
     e.preventDefault();
     try {
       setIsloading(true);
-      const sendDataToDb = await axios.put(
-        `/api/reading/${params.slug}`,
-        {
-          ...testQuestions,
-          headingAnswer: copyMatchHeading,
-          infoAnswers: copyMatchInfo,
-        }
-      );
+      const sendDataToDb = await axios.put(`/api/reading/${params.slug}`, {
+        ...testQuestions,
+        headingAnswer: copyMatchHeading,
+        infoAnswers: copyMatchInfo,
+      });
 
       if (sendDataToDb?.data?.success) {
         toast.success("Updated Successfully");
-        router.push("/dashboard/builder")
+        router.push("/dashboard/builder");
       }
       setTestQuestions({
         title: "",
@@ -576,7 +570,6 @@ const Page = ({ params }) => {
       setIsloading(false);
     }
   };
-
 
   return (
     <>
@@ -1088,8 +1081,7 @@ const Page = ({ params }) => {
             </button>
           </div>
         </div>
-        <div>
-        </div>
+        <div></div>
       </form>
     </>
   );

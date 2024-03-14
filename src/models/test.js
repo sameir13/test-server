@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const testSchema = new mongoose.Schema(
   {
-    author:{
-      type:mongoose.Schema.Types.ObjectId
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
     },
     title: {
       type: String,
@@ -62,12 +62,15 @@ const testSchema = new mongoose.Schema(
         trueFalseChoices: [
           {
             answerValue: { type: String },
+            statement: { type: String },
           },
           {
             answerValue: { type: String },
+            statement: { type: String },
           },
           {
             answerValue: { type: String },
+            statement: { type: String },
           },
         ],
 
