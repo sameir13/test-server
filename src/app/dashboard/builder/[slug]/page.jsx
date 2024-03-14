@@ -56,7 +56,7 @@ const Page = ({ params }) => {
   useEffect(() => {
     const fetchReading = async () => {
       const res = await axios.get(
-        `http://localhost:3000/api/reading/${params.slug}`
+        `/api/reading/${params.slug}`
       );
       setTestQuestions(res?.data?.message);
       setCopyMatchHeading(res?.data?.message?.headingAnswer);

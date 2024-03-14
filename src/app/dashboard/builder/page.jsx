@@ -6,7 +6,7 @@ import queryStr from "query-string";
 import { useRouter } from "next/navigation";
 import { useQuery } from "react-query";
 import { Toaster, toast } from "react-hot-toast";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { format, render, cancel, register } from "timeago.js";
 
 const tableHeader = [
@@ -28,6 +28,7 @@ const Page = () => {
   // Fetch BLog Here --------------------------------------------------/
 
   const [productData, setProductData] = useState([]);
+  console.log(productData)
   const fetchData = async () => {
     try {
       const queryString = queryStr.stringify(FilterByName);
@@ -37,7 +38,7 @@ const Page = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchData();
   }, []);
 
@@ -68,7 +69,7 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchData();
   }, [delPost]);
 

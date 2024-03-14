@@ -475,7 +475,7 @@ const Page = () => {
     try {
       setIsloading(true);
       const sendDataToDb = await axios.post(
-        "http://localhost:3000/api/reading",
+        "http://localhost:300/api/reading",
         {
           ...testQuestions,
           headingAnswer: tags,
