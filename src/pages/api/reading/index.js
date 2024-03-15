@@ -5,34 +5,18 @@ export default async function handler(req, res) {
   dbConnect();
 
   try {
-    switch (req.method) {
-      case "POST":
-        var slug = req.body.title
-          .trim()
-          .toLowerCase()
-          .replace(/ /g, "-")
-          .replace(/[^\w-]+/g, "")
-          .replace(/--/g, "-");
+    var slug = req.body.title
+      .trim()
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "")
+      .replace(/--/g, "-");
 
-        const add = await test.create({ ...req.body, slug });
-        res.status(200).json({
-          success: true,
-          message: add,
-        });
-        break;
-
-      case "GET":
-        const findTest = await test.find();
-        res.status(200).json({
-          success: true,
-          message: findTest,
-        });
-
-        break;
-
-      default:
-        break;
-    }
+    const add = await test.create({ ...req.body, slug });
+    res.status(200).json({
+      success: true,
+      message: add,
+    });
   } catch (error) {
     console.log(error);
     if (error.code === 11000) {

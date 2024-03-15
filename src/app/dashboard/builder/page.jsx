@@ -28,11 +28,10 @@ const Page = () => {
   // Fetch BLog Here --------------------------------------------------/
 
   const [productData, setProductData] = useState([]);
-  console.log(productData)
   const fetchData = async () => {
     try {
       const queryString = queryStr.stringify(FilterByName);
-      const res = await axios.get(`/api/reading?${queryString}`);
+      const res = await axios.get(`/api/reading/get-all?${queryString}`);
       setProductData(res?.data?.message);
     } catch (error) {
       console.log(error);
