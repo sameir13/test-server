@@ -23,7 +23,7 @@ const Dnav = () => {
       if (res?.data?.success) {
         toast.success("Signed Out");
         router.push("/");
-        setShowForm(false)
+        setShowForm(false);
       }
     } catch (error) {
       console.error("Logout failed", error);
@@ -33,14 +33,17 @@ const Dnav = () => {
   return (
     <>
       <Toaster />
-      <div className="relative">
+      <div className="relative  bg-[#1A1DB1]    bg-gradient-to-r  from-[rgba(12,192,232,0.45)]  to-[rgba(22,99,204,0.45)] ">
         <div className="flex items-center justify-between px-4 py-0">
           <div className="flex items-center gap-4">
             <div className="flex items-center  ">
               <Link href={"/"} id="logo" className={Meriend.className}>
                 <div className=" flex items-center gap-3">
-                  <i className="bx bx-book-open text-3xl text-indigo-500"></i>
-                  <p className=" text-indigo-500">ASSESMENT PORTAL</p>
+                  <img
+                    src="/assets/nav/logo.png"
+                    alt=""
+                    className=" mx-10 my-2 w-14"
+                  />
                 </div>
               </Link>
             </div>
@@ -49,15 +52,15 @@ const Dnav = () => {
           <>
             <div className="flex py-2 group relative items-center gap-2 pr-4">
               <Image
-                src={ user?.avatar ? user?.avatar : ""}
+                src={user?.avatar ? user?.avatar : "/assets/home/download.jpg"}
                 alt="image here"
                 height={50}
                 width={50}
                 className="rounded-full h-9 w-9 object-cover cursor-pointer border border-gray-300"
               ></Image>
               <div className="leading-3">
-                <p className="text-[14px] text-black mb-1 capitalize font-medium">
-                  {user?.fullName}
+                <p className="text-[14px] text-white mb-1 capitalize font-medium">
+                  {user?.fullName || "User"}
                 </p>
                 <span className="text-[11px] cursor-pointer text-red-500 hover:text-red-600">
                   {user?.isAdmin ? "Admin" : "User"}

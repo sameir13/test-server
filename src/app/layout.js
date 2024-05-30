@@ -50,7 +50,7 @@ export default function RootLayout({ children }) {
                     </div>
                     <div className="flex flex-1">
                       <Aside />
-                      <div className="overflow-y-auto max-h-[90vh] max-w-[100vw] overflow-x-auto flex-1 bg-gray-100 rounded-2xl shadow-[inset_0px_0px_10px_rgba(56,56,56,0.2)] p-4">
+                      <div className="overflow-y-auto max-h-[100vh] max-w-[100vw] overflow-x-auto flex-1 bg-[#06060F] shadow-[inset_0px_0px_10px_rgba(56,56,56,0.2)] p-4">
                         {children}
                       </div>
                     </div>

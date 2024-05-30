@@ -7,6 +7,12 @@
     text-wrap: balance;
   }
 }
+
+
+*{
+  font-family: sans-serif;
+}
+
 .LoginFormGetInTouch {
   color: #8965EA;
   font-size: 10px;

@@ -6,20 +6,19 @@ import { useContext, useEffect, useState } from "react";
 // ASIDE LINKS ADDED
 var adminNavLinks = [
   { href: "/dashboard", lable: "Dashboard", icon: "fa-solid fa-chart-simple" },
-  { href: "/dashboard/builder", lable: "Reading", icon: "fa-solid fa-pen" },
+
   {
-    href: "/dashboard/tips-&-tricks",
-    lable: "Tips & Tricks",
-    icon: "bx bxs-magic-wand",
+    href: "/dashboard/videos",
+    lable: "Videos",
+    icon: "bx bxs-video-recording",
   },
+
   {
     href: "/dashboard/user",
     lable: "Users",
     icon: "fa-solid fa-headphones-simple",
   },
- 
 ];
-
 
 const Aside = () => {
   const pathname = usePathname();
@@ -48,33 +47,35 @@ const Aside = () => {
     };
   }, []);
 
+  // bg-gradient-to-r from-[rgba(46,136,255,0.45)] to-[rgba(12,192,232,0)]
+
   return (
     <aside
       style={{
         transition: ".6s",
         width: toggle ? "200px" : "48px",
       }}
-      className={`mt-4 overflow-hidden flex flex-col justify-between ${
+      className={` pt-4 overflow-hidden flex flex-col justify-between bg-[#1A1DB1]    bg-gradient-to-r from-[rgba(12,192,232,0.45)] to-[rgba(46,136,255,0.45)] ${
         toggle ? "pr-4" : "pr-0"
       }`}
     >
-      <div className="flex flex-col relative">
-        <div className="flex flex-1 flex-col justify-between h-full my-4">
+      <div className="flex flex-col relative ">
+        <div className="flex flex-1 flex-col justify-between h-full my-10">
           <ul className="text-sm">
             {adminNavLinks.map((v, i) => {
               return (
                 <ul key={i}>
                   <Link
                     href={v.href}
-                    className={`relative mb-2 py-1.5 px-4 flex items-center rounded-none lg:rounded-r-full hover:bg-[#3e1e9707] group cursor-pointer ${
+                    className={`relative mb-2 py-1.5 px-4 flex items-center rounded-none lg:rounded-r-full  group cursor-pointer ${
                       pathname === v.href
-                        ? "group cursor-pointer lg:bg-[#F6F5FD] md:bg-transparent"
+                        ? "group cursor-pointer lg:bg-[#06060F] md:bg-transparent"
                         : ""
                     }`}
                   >
                     <i
                       className={`${v.icon} text-base ${
-                        pathname === v.href ? "text-[#3E1E97]" : "text-gray-500"
+                        pathname === v.href ? "text-white" : "text-white"
                       }`}
                     ></i>
                     <div
@@ -84,8 +85,8 @@ const Aside = () => {
                       }}
                       className={`ml-3 ${
                         pathname === v.href
-                          ? "text-[#3E1E97] font-medium"
-                          : "text-gray-600"
+                          ? "text-white font-medium"
+                          : "text-white"
                       }`}
                     >
                       {v.lable}
